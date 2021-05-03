@@ -95,7 +95,7 @@ contract MedTrials is AccessControl {
         return hasRole(INVESTIGATOR, _address);
     }
 
-    function addPromoter(address _address, string _cid) public {
+    function addPromoter(address _address, string memory _cid) public {
         require(
             hasRole(PROMOTER_ADMIN, msg.sender),
             "Only the promotor admin can add investigators"

@@ -1,7 +1,14 @@
 import React, { Component } from 'react';
 import { Button, Form, Message, Grid, Card, Image, Divider } from 'semantic-ui-react';
+import EncryptData from '../utils/EncryptData';
+import SendToIPFS from '../utils/SendToIPFS';
+import DecryptData from '../utils/DecryptData';
+import FetchFromIPFS from '../utils/FetchFromIPFS';
 import Header from './Header';
 import './styles/style.css';
+
+const iv = 16;
+const ENCRYPTION_KEY = 'fpbyr4386v8hpxdruppijkt3v6wayxmi';
 
 class PromoterAdmin extends Component {
     state = {
@@ -11,33 +18,83 @@ class PromoterAdmin extends Component {
         description: '',
         company: '',
         promoterAddress: '',
-        message: ''
+        message: '',
+        nbOfPromoters: 0,
+        promoters: []
     }
 
     onFormSubmit = async () => {
+        console.log("NAME =", this.state.fullName);
+        console.log("COMPANY =", this.state.company);
         console.log("address =", this.state.address);
-        
+
+        const obj = {
+            fullName: this.state.fullName,
+            company: this.state.company,
+            address: this.state.address,
+            description: `${this.state.fullName} is a full promotor at ${this.state.company}. To know more...`
+        }
+
+        // store encrypted data to ipfs
+        const encryptedProtocol = EncryptData(JSON.stringify(obj), iv, ENCRYPTION_KEY);
+        const cid = await SendToIPFS(encryptedProtocol);
+  
+        // store the promoter address and the data cid to ethereum
         const receipt = await this.props.contract.methods.addPromoter(
-            this.state.address
+            this.state.address, cid
         ).send({ from: this.props.account });
 
         //let addr = receipt.events.promoterAdded.returnValues[0];
         this.setState({
-            promoterAddress: receipt.events.promoterAdded.returnValues[0],
+            //promoterAddress: receipt.events.promoterAdded.returnValues[0],
             message: 'ok',
             address: '',
             fullName: '',
             company: ''
         });
 
+        this.getPromoters();
+
+    }
+
+    componentDidMount = async () => {
+        this.getPromoters();
     }
 
     onMessageClose = async () => {
         this.setState({ message: '' });
     }
 
+    getPromoters = async () => {
+        const nb = await this.props.contract.methods.nbOfPromoters()
+            .call({from: this.props.account});
+        this.setState({ nbOfPromoters: nb });
+
+        let promoterTab = [];
+        for (let i = 0; i< nb; i++) {
+            const promoter = await this.props.contract.methods.promoters(i)
+                .call({ from: this.props.account });
+
+            let encodedData = await FetchFromIPFS(promoter.cid, ENCRYPTION_KEY);
+            let data = JSON.parse(encodedData);
+
+            promoterTab.push(data);
+            
+        }
+
+        this.setState({ promoters: promoterTab });
+    }
+
   render() {
     const { address, fullName, company, promoterAddress, message } = this.state;
+    const nb = this.setState.nbOfPromoters;
+    let Tab = [];
+    Tab = this.state.promoters;
+    
+
+    // fetch promoters address and cids from ethereum
+    console.log("NB =", this.state.nbOfPromoters);
+    console.log("Promoters =", this.state.promoters);
 
     return (
         <div>
@@ -92,6 +149,83 @@ class PromoterAdmin extends Component {
 
                 <div className="admin-divider">
                     <Divider />
+                </div>
+
+                <div className="admin-grid">
+                    {
+                        {nb} !== 0
+                        ?
+                            <Grid columns={3} divided>
+                                {
+                                    Tab.map((res, index, arr) => 
+                                        <Grid.Row key={index}>
+                                            <Grid.Column>
+                                                <Card>
+                                                    <Card.Content textAlign="left">
+                                                        <Image
+                                                            floated='right'
+                                                            size='mini'
+                                                            src='https://react.semantic-ui.com/images/avatar/large/steve.jpg'
+                                                        />
+                                                        <Card.Header>{Tab[index].fullName}</Card.Header>
+                                                        <Card.Meta>Promoter at {Tab[index].company}</Card.Meta>
+                                                        <Card.Description>
+                                                            {Tab[index].description}.
+                                                            <br></br>
+                                                            <br></br>
+                                                            Address: {Tab[index].address.substr(0, 10)}...
+                                                            <hr></hr>
+                                                        </Card.Description>                                    
+                                                    </Card.Content>
+                                                </Card>
+                                            </Grid.Column>
+                                            <Grid.Column>
+                                                <Card>
+                                                    <Card.Content textAlign="left">
+                                                        <Image
+                                                            floated='right'
+                                                            size='mini'
+                                                            src='https://react.semantic-ui.com/images/avatar/large/steve.jpg'
+                                                        />
+                                                        <Card.Header>{Tab[index].fullName}</Card.Header>
+                                                        <Card.Meta>Promoter at {Tab[index].company}</Card.Meta>
+                                                        <Card.Description>
+                                                            {Tab[index].description}.
+                                                            <br></br>
+                                                            <br></br>
+                                                            Address: {Tab[index].address.substr(0, 10)}...
+                                                            <hr></hr>
+                                                        </Card.Description>                                    
+                                                    </Card.Content>
+                                                </Card>
+                                            </Grid.Column>
+                                            <Grid.Column>
+                                                <Card>
+                                                    <Card.Content textAlign="left">
+                                                        <Image
+                                                            floated='right'
+                                                            size='mini'
+                                                            src='https://react.semantic-ui.com/images/avatar/large/steve.jpg'
+                                                        />
+                                                        <Card.Header>{Tab[index].fullName}</Card.Header>
+                                                        <Card.Meta>Promoter at {Tab[index].company}</Card.Meta>
+                                                        <Card.Description>
+                                                            {Tab[index].description}.
+                                                            <br></br>
+                                                            <br></br>
+                                                            Address: {Tab[index].address.substr(0, 10)}...
+                                                            <hr></hr>
+                                                        </Card.Description>                                    
+                                                    </Card.Content>
+                                                </Card>
+                                            </Grid.Column>
+                                        </Grid.Row>
+                                    )
+                                }
+                            </Grid>
+                        :
+                            console.log("")
+                    }
                 </div>
                 
 
