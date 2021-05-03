@@ -157,69 +157,27 @@ class PromoterAdmin extends Component {
                         ?
                             <Grid columns={3} divided>
                                 {
-                                    Tab.map((res, index, arr) => 
-                                        <Grid.Row key={index}>
-                                            <Grid.Column>
-                                                <Card>
-                                                    <Card.Content textAlign="left">
-                                                        <Image
-                                                            floated='right'
-                                                            size='mini'
-                                                            src='https://react.semantic-ui.com/images/avatar/large/steve.jpg'
-                                                        />
-                                                        <Card.Header>{Tab[index].fullName}</Card.Header>
-                                                        <Card.Meta>Promoter at {Tab[index].company}</Card.Meta>
-                                                        <Card.Description>
-                                                            {Tab[index].description}.
-                                                            <br></br>
-                                                            <br></br>
-                                                            Address: {Tab[index].address.substr(0, 10)}...
-                                                            <hr></hr>
-                                                        </Card.Description>                                    
-                                                    </Card.Content>
-                                                </Card>
-                                            </Grid.Column>
-                                            <Grid.Column>
-                                                <Card>
-                                                    <Card.Content textAlign="left">
-                                                        <Image
-                                                            floated='right'
-                                                            size='mini'
-                                                            src='https://react.semantic-ui.com/images/avatar/large/steve.jpg'
-                                                        />
-                                                        <Card.Header>{Tab[index].fullName}</Card.Header>
-                                                        <Card.Meta>Promoter at {Tab[index].company}</Card.Meta>
-                                                        <Card.Description>
-                                                            {Tab[index].description}.
-                                                            <br></br>
-                                                            <br></br>
-                                                            Address: {Tab[index].address.substr(0, 10)}...
-                                                            <hr></hr>
-                                                        </Card.Description>                                    
-                                                    </Card.Content>
-                                                </Card>
-                                            </Grid.Column>
-                                            <Grid.Column>
-                                                <Card>
-                                                    <Card.Content textAlign="left">
-                                                        <Image
-                                                            floated='right'
-                                                            size='mini'
-                                                            src='https://react.semantic-ui.com/images/avatar/large/steve.jpg'
-                                                        />
-                                                        <Card.Header>{Tab[index].fullName}</Card.Header>
-                                                        <Card.Meta>Promoter at {Tab[index].company}</Card.Meta>
-                                                        <Card.Description>
-                                                            {Tab[index].description}.
-                                                            <br></br>
-                                                            <br></br>
-                                                            Address: {Tab[index].address.substr(0, 10)}...
-                                                            <hr></hr>
-                                                        </Card.Description>                                    
-                                                    </Card.Content>
-                                                </Card>
-                                            </Grid.Column>
-                                        </Grid.Row>
+                                    Tab.map((res, index, arr) =>
+                                        <div className="admin-card">
+                                            <Card>
+                                                <Card.Content textAlign="left">
+                                                    <Image
+                                                        floated='right'
+                                                        size='mini'
+                                                        src='https://react.semantic-ui.com/images/avatar/large/steve.jpg'
+                                                    />
+                                                    <Card.Header>{Tab[index].fullName}</Card.Header>
+                                                    <Card.Meta>Promoter at {Tab[index].company}</Card.Meta>
+                                                    <Card.Description>
+                                                        {Tab[index].description}.
+                                                        <br></br>
+                                                        <br></br>
+                                                        Address: {Tab[index].address.substr(0, 10)}...
+                                                        <hr></hr>
+                                                    </Card.Description>                                    
+                                                </Card.Content>
+                                            </Card>                                            
+                                        </div> 
                                     )
                                 }
                             </Grid>
@@ -242,75 +200,7 @@ class PromoterAdmin extends Component {
                                 </p>
                             </Message>                        
                     }
-
                 </div>
-            </div>
-
-            <div className="admin-grid">
-                <Grid columns={3} divided>
-                    <Grid.Row>
-                        <Grid.Column>
-                            <Card>
-                                <Card.Content textAlign="left">
-                                    <Image
-                                        floated='right'
-                                        size='mini'
-                                        src='https://react.semantic-ui.com/images/avatar/large/steve.jpg'
-                                    />
-                                    <Card.Header>Samuel Edoumou</Card.Header>
-                                    <Card.Meta>Promoter at We-Promoters</Card.Meta>
-                                    <Card.Description>
-                                        Sam is a full stack Blockchain and react developper IT.
-                                        <br></br>
-                                        <br></br>
-                                        Address: {this.props.account.substr(0, 10)}...
-                                        <hr></hr>
-                                    </Card.Description>                                    
-                                </Card.Content>
-                            </Card>
-                        </Grid.Column>
-                        <Grid.Column>
-                            <Card>
-                                <Card.Content textAlign="left">
-                                    <Image
-                                        floated='right'
-                                        size='mini'
-                                        src='https://react.semantic-ui.com/images/avatar/large/steve.jpg'
-                                    />
-                                    <Card.Header>Samuel Edoumou</Card.Header>
-                                    <Card.Meta>Promoter at We-Promoters</Card.Meta>
-                                    <Card.Description>
-                                        Sam is a full stack Blockchain and react developper IT.
-                                        <br></br>
-                                        <br></br>
-                                        Address: {this.props.account.substr(0, 10)}...
-                                        <hr></hr>
-                                    </Card.Description>                                    
-                                </Card.Content>
-                            </Card>             
-                        </Grid.Column>
-                        <Grid.Column>
-                            <Card>
-                                <Card.Content textAlign="left">
-                                    <Image
-                                        floated='right'
-                                        size='mini'
-                                        src='https://react.semantic-ui.com/images/avatar/large/steve.jpg'
-                                    />
-                                    <Card.Header>Samuel Edoumou</Card.Header>
-                                    <Card.Meta>Promoter at We-Promoters</Card.Meta>
-                                    <Card.Description>
-                                        Sam is a full stack Blockchain and react developper IT.
-                                        <br></br>
-                                        <br></br>
-                                        Address: {this.props.account.substr(0, 10)}...
-                                        <hr></hr>
-                                    </Card.Description>                                    
-                                </Card.Content>
-                            </Card>                        
-                        </Grid.Column>
-                    </Grid.Row>
-                </Grid>
             </div>
         </div>
     );
