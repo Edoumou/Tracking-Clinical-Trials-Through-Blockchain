@@ -166,13 +166,13 @@ class PromoterAdmin extends Component {
                                                         size='mini'
                                                         src='https://react.semantic-ui.com/images/avatar/large/steve.jpg'
                                                     />
-                                                    <Card.Header>{Tab[index].fullName}</Card.Header>
+                                                    <Card.Header><a>{Tab[index].fullName}</a></Card.Header>
                                                     <Card.Meta>Promoter at {Tab[index].company}</Card.Meta>
                                                     <Card.Description>
                                                         {Tab[index].description}.
                                                         <br></br>
                                                         <br></br>
-                                                        Address: {Tab[index].address.substr(0, 10)}...
+                                                        Address: <strong>{Tab[index].address.substr(0, 10)}</strong>...
                                                         <hr></hr>
                                                     </Card.Description>                                    
                                                 </Card.Content>
