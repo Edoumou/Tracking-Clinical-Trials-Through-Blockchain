@@ -154,48 +154,40 @@ class RegisterProtocol extends Component {
                     :
                         console.log("")                    
                 }
-
-
-                <div className="promoter-tab">
-                    <Table celled>
-                        <Table.Header>
-                            <Table.Row>
-                                <Table.HeaderCell>ID</Table.HeaderCell>
-                                <Table.HeaderCell>CID</Table.HeaderCell>
-                                <Table.HeaderCell>Investigator</Table.HeaderCell>
-                                <Table.HeaderCell>Authorization</Table.HeaderCell>
-                                <Table.HeaderCell>Status</Table.HeaderCell>
-                            </Table.Row>
-                        </Table.Header>
-                        <Table.Body>
-                            {
-                                this.state.msg !== ''
-                                ?
-                                    Tab.map((res, index, arr) =>
-                                        <Table.Row>
-                                            <Table.Cell>{Tab[index].id}</Table.Cell>
-                                            <Table.Cell>{Tab[index].cid}</Table.Cell>
-                                            <Table.Cell>{Tab[index].investigator}</Table.Cell>
-                                            <Table.Cell textAlign="center">{Tab[index].authorized === false ? <Icon name="hourglass outline icon" /> : <Icon name='checkmark' /> }</Table.Cell>
-                                            <Table.Cell>{Tab[index].status}</Table.Cell>
-                                        </Table.Row>
-                                    )
-                                :
-                                    console.log("")
-                            }
-                        </Table.Body>
-                    </Table>
-                </div>
-
                 
-{
-    this.state.msg !== '' 
-        ?
-            console.log("TABLE =", Tab[0].id)
+                <div className="promoter-tab">
+                    {
+                        this.state.msg !== ''
+                        ?
+                            <Table celled>
+                                <Table.Header>
+                                    <Table.Row>
+                                        <Table.HeaderCell>ID</Table.HeaderCell>
+                                        <Table.HeaderCell>CID</Table.HeaderCell>
+                                        <Table.HeaderCell>Investigator</Table.HeaderCell>
+                                        <Table.HeaderCell>Authorization</Table.HeaderCell>
+                                        <Table.HeaderCell>Status</Table.HeaderCell>
+                                    </Table.Row>
+                                </Table.Header>
+                                <Table.Body>   
+                                    {
+                                        Tab.map((res, index, arr) =>
+                                            <Table.Row key={index}>
+                                                <Table.Cell>{Tab[index].id}</Table.Cell>
+                                                <Table.Cell>{Tab[index].cid}</Table.Cell>
+                                                <Table.Cell>{Tab[index].investigator}</Table.Cell>
+                                                <Table.Cell textAlign="center">{Tab[index].authorized === false ? <Icon name="hourglass outline" /> : <Icon name='checkmark' /> }</Table.Cell>
+                                                <Table.Cell>{Tab[index].status}</Table.Cell>
+                                            </Table.Row>
+                                        )
+                                    }                                                                           
+                                </Table.Body>
+                            </Table>
+                        :
+                            console.log("")
 
-        :
-            console.log("")
-}
+                        }
+                </div>
                 
             </div>
         )

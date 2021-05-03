@@ -23,9 +23,15 @@ contract MedTrials is AccessControl {
         string[] cids;
     }
 
+    struct Promoter {
+        address promoter;
+        string cid;
+    }
+
     mapping(string => Protocol) public protocols;
     mapping(string => Patient) public patients;
     mapping(uint256 => string) public protocolsID;
+    mapping(uint256 => Promoter) public promoters;
     mapping(address => string) roles;
 
     mapping(string => mapping(string => uint256)) private protocolNumerotation;
@@ -39,6 +45,7 @@ contract MedTrials is AccessControl {
 
     uint256 public nbOfProtocolsRegistered;
     uint256 public nbOfPatients;
+    uint256 public nbOfPromoters;
 
     event promoterAdded(address _address);
     event authorityAdded(address _address);
@@ -88,16 +95,21 @@ contract MedTrials is AccessControl {
         return hasRole(INVESTIGATOR, _address);
     }
 
-    function addPromoter(address _address) public {
+    function addPromoter(address _address, string _cid) public {
         require(
             hasRole(PROMOTER_ADMIN, msg.sender),
             "Only the promotor admin can add investigators"
         );
         require(!hasRole(PROMOTER, _address), "You are already a promoter");
         require(!hasRole(INVESTIGATOR, _address), "You are an investigator");
+        require(!hasRole(AUTHORITY, _address), "You are an authority");
 
         grantRole(PROMOTER, _address);
         roles[_address] = "PROMOTER";
+
+        promoters[nbOfPromoters].cid = _cid;
+        promoters[nbOfPromoters].promoter = _address;
+        nbOfPromoters++;
 
         emit promoterAdded(_address);
     }
@@ -112,6 +124,7 @@ contract MedTrials is AccessControl {
             "You are already an investigator"
         );
         require(!hasRole(PROMOTER, _address), "You are a promoter");
+        require(!hasRole(AUTHORITY, _address), "You are an authority");
 
         grantRole(INVESTIGATOR, _address);
         roles[_address] = "INVESTIGATOR";
