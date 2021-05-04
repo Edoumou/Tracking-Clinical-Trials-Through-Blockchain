@@ -7,9 +7,9 @@ class Home extends Component {
     return (
       <div>
           <Header />
-          <h1>This is the home page for Authorities</h1>
+          <h1>This is the home page for Authorities with role</h1>
       </div>
-    )
+    );
   }
 }
 

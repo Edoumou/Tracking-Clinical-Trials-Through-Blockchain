@@ -4,6 +4,7 @@ import headerImage from '../../images/header2.jpeg';
 import { Button, Menu, Segment } from 'semantic-ui-react';
 import { Link, BrowserRouter, Route, Switch } from 'react-router-dom';
 import '../../App.css';
+import './styles/style.css'
 //import Header from './Header';
 import Home from './Home';
 import RegisterProtocol from './RegisterProtocol';

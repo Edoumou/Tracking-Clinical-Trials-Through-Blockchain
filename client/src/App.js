@@ -5,6 +5,7 @@ import getWeb3 from "./getWeb3";
 import "./App.css";
 import NotUser from "./components/NotUser";
 import Authority from "./components/Authority/Home";
+import AuthorityAdmin from "./components/Authority/AuthorityAdmin";
 import PromoterAdmin from './components/Promoter/PromoterAdmin';
 import Promoter from "./components/Promoter/Promoter";
 import Investigator from "./components/Investigator/Home";
@@ -97,7 +98,21 @@ class App extends Component {
     } else if (role === "AUTHORITY ADMIN") {
       return (
         <div className="App ui container">
-          <Authority />
+          <AuthorityAdmin
+            contract = {contract}
+            role = {role}
+            account = {account}            
+          />
+        </div>
+      );
+    } else if (role === "AUTHORITY") {
+      return (
+        <div className="App ui container">
+          <Authority
+            contract = {contract}
+            role = {role}
+            account = {account}            
+          />
         </div>
       );
     } else if (role === "PROMOTER ADMIN") {

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import ReactFileReader from 'react-file-reader';
-import { Button, Form, Icon, Tab, Table, TableRow } from 'semantic-ui-react';
+import { Button, Form, Icon, Table } from 'semantic-ui-react';
 import "./styles/style.css";
 import EncryptData from '../utils/EncryptData';
 import SendToIPFS from '../utils/SendToIPFS';
@@ -54,14 +54,9 @@ class RegisterProtocol extends Component {
         console.log("RECIPT =", receipt);
         console.log("NUMEROTATION =", numerotation);
 
-        // List registered protocols
-        const nbOfprotocols = await this.props.contract.methods.nbOfProtocolsRegistered()
-            .call({ from: this.props.account });
-
         this.setState({ msg: 'ok' });
 
-        console.log("PROTOCOL TAB =", this.state.protocolsTab);
-        console.log("ELEMENT =", this.state.protocolsTab[0].cid);
+        await this.getProtocols();
 
         this.setState({
             center: '',

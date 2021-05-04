@@ -4,12 +4,12 @@ import EncryptData from '../utils/EncryptData';
 import SendToIPFS from '../utils/SendToIPFS';
 import FetchFromIPFS from '../utils/FetchFromIPFS';
 import Header from './Header';
-import './styles/style.css';
+//import './styles/style.css';
 
 const iv = 16;
 const ENCRYPTION_KEY = 'fpbyr4386v8hpxdruppijkt3v6wayxmi';
 
-class PromoterAdmin extends Component {
+class AuthorityAdmin extends Component {
     state = {
         ci: '',
         fullName: '',
@@ -206,4 +206,4 @@ class PromoterAdmin extends Component {
   }
 }
 
-export default PromoterAdmin
+export default AuthorityAdmin

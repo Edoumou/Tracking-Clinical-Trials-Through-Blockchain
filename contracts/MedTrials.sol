@@ -28,10 +28,16 @@ contract MedTrials is AccessControl {
         string cid;
     }
 
+    struct Authority {
+        address authority;
+        string cid;
+    }
+
     mapping(string => Protocol) public protocols;
     mapping(string => Patient) public patients;
     mapping(uint256 => string) public protocolsID;
     mapping(uint256 => Promoter) public promoters;
+    mapping(uint256 => Authority) public authorities;
     mapping(address => string) roles;
 
     mapping(string => mapping(string => uint256)) private protocolNumerotation;
@@ -46,6 +52,7 @@ contract MedTrials is AccessControl {
     uint256 public nbOfProtocolsRegistered;
     uint256 public nbOfPatients;
     uint256 public nbOfPromoters;
+    uint256 public nbOfAuthorities;
 
     event promoterAdded(address _address);
     event authorityAdded(address _address);
@@ -77,22 +84,30 @@ contract MedTrials is AccessControl {
         _setupRole(AUTHORITY_ADMIN, _authorityAdmin);
         _setupRole(PROMOTER_ADMIN, _promotorAdmin);
 
-        //renounceRole(DEFAULT_ADMIN_ROLE, _default_admin);
+        renounceRole(DEFAULT_ADMIN_ROLE, _default_admin);
 
         roles[_authorityAdmin] = "AUTHORITY ADMIN";
         roles[_promotorAdmin] = "PROMOTER ADMIN";
     }
 
-    function isAuthority(address _address) public view returns (bool) {
-        return hasRole(AUTHORITY, _address);
-    }
+    function addAuthority(address _address, string memory _cid) public {
+        require(
+            hasRole(AUTHORITY_ADMIN, msg.sender),
+            "Only the authority admin can add investigators"
+        );
+        require(!hasRole(AUTHORITY, _address), "You are already an authority");
+        require(!hasRole(PROMOTER, _address), "You are a promoter");
+        require(!hasRole(INVESTIGATOR, _address), "You are an investigator");
+        require(!hasRole(PROMOTER_ADMIN, _address), "You are a promoter admin");
+        require(
+            !hasRole(AUTHORITY_ADMIN, _address),
+            "You are an authority admin"
+        );
 
-    function isPromoter(address _address) public view returns (bool) {
-        return hasRole(PROMOTER, _address);
-    }
+        grantRole(AUTHORITY, _address);
+        roles[_address] = "AUTHORITY";
 
-    function isInvestigator(address _address) public view returns (bool) {
-        return hasRole(INVESTIGATOR, _address);
+        emit authorityAdded(_address);
     }
 
     function addPromoter(address _address, string memory _cid) public {
@@ -103,6 +118,11 @@ contract MedTrials is AccessControl {
         require(!hasRole(PROMOTER, _address), "You are already a promoter");
         require(!hasRole(INVESTIGATOR, _address), "You are an investigator");
         require(!hasRole(AUTHORITY, _address), "You are an authority");
+        require(!hasRole(PROMOTER_ADMIN, _address), "You are a promoter admin");
+        require(
+            !hasRole(AUTHORITY_ADMIN, _address),
+            "You are an authority admin"
+        );
 
         grantRole(PROMOTER, _address);
         roles[_address] = "PROMOTER";
@@ -125,26 +145,16 @@ contract MedTrials is AccessControl {
         );
         require(!hasRole(PROMOTER, _address), "You are a promoter");
         require(!hasRole(AUTHORITY, _address), "You are an authority");
+        require(!hasRole(PROMOTER_ADMIN, _address), "You are a promoter admin");
+        require(
+            !hasRole(AUTHORITY_ADMIN, _address),
+            "You are an authority admin"
+        );
 
         grantRole(INVESTIGATOR, _address);
         roles[_address] = "INVESTIGATOR";
 
         emit investigatorAdded(_address);
-    }
-
-    function addAuthority(address _address) public {
-        require(
-            hasRole(AUTHORITY_ADMIN, msg.sender),
-            "Only the authority admin can add investigators"
-        );
-        require(!hasRole(AUTHORITY, _address), "You are already an authority");
-        require(!hasRole(PROMOTER, _address), "You are a promoter");
-        require(!hasRole(INVESTIGATOR, _address), "You are an investigator");
-
-        grantRole(AUTHORITY, _address);
-        roles[_address] = "AUTHORITY";
-
-        emit authorityAdded(_address);
     }
 
     function registerProtocol(
@@ -165,6 +175,14 @@ contract MedTrials is AccessControl {
         require(
             !hasRole(AUTHORITY, _investigator),
             "Authorities cannot be investigators"
+        );
+        require(
+            !hasRole(PROMOTER_ADMIN, _investigator),
+            "Promoters admin cannot be an investigator"
+        );
+        require(
+            !hasRole(AUTHORITY_ADMIN, _investigator),
+            "Authorities admin cannot be an investigator"
         );
         require(
             !protocols[_id].registered,
