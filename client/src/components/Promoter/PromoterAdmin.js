@@ -58,7 +58,7 @@ class PromoterAdmin extends Component {
     }
 
     componentDidMount = async () => {
-        this.getPromoters();
+        await this.getPromoters();
     }
 
     onMessageClose = async () => {
@@ -87,7 +87,7 @@ class PromoterAdmin extends Component {
 
   render() {
     const { address, fullName, company, promoterAddress, message } = this.state;
-    const nb = this.setState.nbOfPromoters;
+    const nb = this.state.nbOfPromoters;
     let Tab = [];
     Tab = this.state.promoters;
     
@@ -158,7 +158,7 @@ class PromoterAdmin extends Component {
                             <Grid columns={3} divided>
                                 {
                                     Tab.map((res, index, arr) =>
-                                        <div className="admin-card">
+                                        <div className="admin-card" key={index}>
                                             <Card>
                                                 <Card.Content textAlign="left">
                                                     <Image

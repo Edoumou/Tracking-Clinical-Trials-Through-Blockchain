@@ -16,6 +16,7 @@ class RegisterProtocol extends Component {
         filename: '',
         base64: '',
         protocolsTab: [],
+        nbOfProtocols: 0,
         msg: ''
     }
 
@@ -57,27 +58,7 @@ class RegisterProtocol extends Component {
         const nbOfprotocols = await this.props.contract.methods.nbOfProtocolsRegistered()
             .call({ from: this.props.account });
 
-        let protocolTab = [];
-        for (let i = 0; i < nbOfprotocols; i++) {
-            const id = await this.props.contract.methods.protocolsID(i).call({ from: this.props.account });
-
-            const protocol = await this.props.contract.methods.protocols(id)
-                .call({ from:  this.props.account });
-
-            let struct = {};
-            struct.id = id;
-            struct.cid = protocol['cid'];
-            struct.status = protocol['status'];
-            struct.authorized = protocol['authorized'];
-            struct.promoter = protocol['promoter'];
-            struct.investigator = protocol['investigator'];
-
-            if (protocol['promoter'] === this.props.account) {
-                protocolTab.push(struct);
-            }
-        }
-
-        this.setState({ protocolsTab: protocolTab, msg: 'ok' });
+        this.setState({ msg: 'ok' });
 
         console.log("PROTOCOL TAB =", this.state.protocolsTab);
         console.log("ELEMENT =", this.state.protocolsTab[0].cid);
@@ -98,8 +79,41 @@ class RegisterProtocol extends Component {
         })
     }
 
+    componentDidMount = async () => {
+        await this.getProtocols();
+    }
+
+    getProtocols = async () => {
+        const nb = await this.props.contract.methods.nbOfProtocolsRegistered()
+            .call({ from: this.props.account });
+        this.setState({ nbOfProtocols: nb });
+
+        let protocolTab = [];
+        for (let i = 0; i < nb; i++) {
+            const id = await this.props.contract.methods.protocolsID(i).call({ from: this.props.account });
+
+            const protocol = await this.props.contract.methods.protocols(id)
+                .call({ from:  this.props.account });
+
+            let struct = {};
+            struct.id = id;
+            struct.cid = protocol['cid'];
+            struct.status = protocol['status'];
+            struct.authorized = protocol['authorized'];
+            struct.promoter = protocol['promoter'];
+            struct.investigator = protocol['investigator'];
+
+            if (protocol['promoter'] === this.props.account) {
+                protocolTab.push(struct);
+            }
+        }
+        
+        this.setState({ protocolsTab: protocolTab});
+    }
+
     render() {
         const { center, category, investigatorAddress } = this.state;
+        const nb = this.state.nbOfProtocols;
         let Tab = [];
         Tab = this.state.protocolsTab;
         console.log("TAB =", Tab);
@@ -157,7 +171,7 @@ class RegisterProtocol extends Component {
                 
                 <div className="promoter-tab">
                     {
-                        this.state.msg !== ''
+                        {nb} !== 0
                         ?
                             <Table celled>
                                 <Table.Header>
