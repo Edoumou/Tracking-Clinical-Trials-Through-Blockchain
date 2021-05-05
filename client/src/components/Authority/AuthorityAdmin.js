@@ -16,10 +16,10 @@ class AuthorityAdmin extends Component {
         address: '',
         description: '',
         company: '',
-        promoterAddress: '',
+        authorityAddress: '',
         message: '',
-        nbOfPromoters: 0,
-        promoters: []
+        nbOfAuthorities: 0,
+        authorities: []
     }
 
     onFormSubmit = async () => {
@@ -31,7 +31,7 @@ class AuthorityAdmin extends Component {
             fullName: this.state.fullName,
             company: this.state.company,
             address: this.state.address,
-            description: `${this.state.fullName} is a full promotor at ${this.state.company}. To know more...`
+            description: `${this.state.fullName} is a full authority at ${this.state.company}. To know more...`
         }
 
         // store encrypted data to ipfs
@@ -39,7 +39,7 @@ class AuthorityAdmin extends Component {
         const cid = await SendToIPFS(encryptedProtocol);
   
         // store the promoter address and the data cid to ethereum
-        await this.props.contract.methods.addPromoter(
+        await this.props.contract.methods.addAuthority(
             this.state.address, cid
         ).send({ from: this.props.account });
 
@@ -52,48 +52,48 @@ class AuthorityAdmin extends Component {
             company: ''
         });
 
-        this.getPromoters();
+        this.getAuthorities();
 
     }
 
     componentDidMount = async () => {
-        await this.getPromoters();
+        await this.getAuthorities();
     }
 
     onMessageClose = async () => {
         this.setState({ message: '' });
     }
 
-    getPromoters = async () => {
-        const nb = await this.props.contract.methods.nbOfPromoters()
+    getAuthorities = async () => {
+        const nb = await this.props.contract.methods.nbOfAuthorities()
             .call({from: this.props.account});
-        this.setState({ nbOfPromoters: nb });
+        this.setState({ nbOfAuthorities: nb });
 
-        let promoterTab = [];
+        let authorityTab = [];
         for (let i = 0; i< nb; i++) {
-            const promoter = await this.props.contract.methods.promoters(i)
+            const authority = await this.props.contract.methods.authorities(i)
                 .call({ from: this.props.account });
 
-            let encodedData = await FetchFromIPFS(promoter.cid, ENCRYPTION_KEY);
+            let encodedData = await FetchFromIPFS(authority.cid, ENCRYPTION_KEY);
             let data = JSON.parse(encodedData);
 
-            promoterTab.push(data);
+            authorityTab.push(data);
             
         }
 
-        this.setState({ promoters: promoterTab });
+        this.setState({ authorities: authorityTab });
     }
 
   render() {
-    const { address, fullName, company, promoterAddress, message } = this.state;
-    const nb = this.state.nbOfPromoters;
+    const { address, fullName, company, authorityAddress, message } = this.state;
+    const nb = this.state.nbOfAuthorities;
     let Tab = [];
-    Tab = this.state.promoters;
+    Tab = this.state.authorities;
     
 
     // fetch promoters address and cids from ethereum
-    console.log("NB =", this.state.nbOfPromoters);
-    console.log("Promoters =", this.state.promoters);
+    console.log("NB =", this.state.nbOfAuthorities);
+    console.log("Promoters =", this.state.authorities);
 
     return (
         <div>
@@ -105,7 +105,7 @@ class AuthorityAdmin extends Component {
             
             <div>
                 <div className="admin-h1">
-                    <h1>Add a promoter</h1>
+                    <h1>Add an authority</h1>
                 </div>
                 
                 <div className="admin-form">
@@ -166,7 +166,7 @@ class AuthorityAdmin extends Component {
                                                         src='https://react.semantic-ui.com/images/avatar/large/steve.jpg'
                                                     />
                                                     <Card.Header>{Tab[index].fullName}</Card.Header>
-                                                    <Card.Meta>Promoter at {Tab[index].company}</Card.Meta>
+                                                    <Card.Meta>Authority at {Tab[index].company}</Card.Meta>
                                                     <Card.Description>
                                                         {Tab[index].description}.
                                                         <br></br>
@@ -193,9 +193,9 @@ class AuthorityAdmin extends Component {
                             console.log("")
                         :
                             <Message positive onDismiss={this.onMessageClose}>
-                                <Message.Header>Promoter added</Message.Header>
+                                <Message.Header>Authority added</Message.Header>
                                 <p>
-                                    Promoter with address {promoterAddress} as been added.
+                                    Authority with address {authorityAddress} as been added.
                                 </p>
                             </Message>                        
                     }

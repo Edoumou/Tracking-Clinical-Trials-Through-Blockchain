@@ -107,6 +107,10 @@ contract MedTrials is AccessControl {
         grantRole(AUTHORITY, _address);
         roles[_address] = "AUTHORITY";
 
+        authorities[nbOfAuthorities].cid = _cid;
+        authorities[nbOfAuthorities].authority = _address;
+        nbOfAuthorities++;
+
         emit authorityAdded(_address);
     }
 

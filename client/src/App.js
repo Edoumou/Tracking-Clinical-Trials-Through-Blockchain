@@ -4,7 +4,7 @@ import MedTrials from "./contracts/MedTrials.json";
 import getWeb3 from "./getWeb3";
 import "./App.css";
 import NotUser from "./components/NotUser";
-import Authority from "./components/Authority/Home";
+import Authority from "./components/Authority/Authority";
 import AuthorityAdmin from "./components/Authority/AuthorityAdmin";
 import PromoterAdmin from './components/Promoter/PromoterAdmin';
 import Promoter from "./components/Promoter/Promoter";

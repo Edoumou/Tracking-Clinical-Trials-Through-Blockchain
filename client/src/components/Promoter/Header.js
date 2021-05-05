@@ -13,13 +13,14 @@ import AddInvestigator from './AddInvestigator';
 class Header extends Component {
     render() {
         const role = this.props.role;
+        const account = this.props.account;
 
         if (role === 'PROMOTER ADMIN') {
             return (
                 <div className="promoter-admin">
                     <Segment.Group horizontal>
                         <Segment className="seg-left"><strong>{role}</strong></Segment>
-                        <Segment className="seg-right"><strong>{this.props.account}</strong></Segment>
+                        <Segment className="seg-right"><strong>{account}</strong></Segment>
                     </Segment.Group>
 
                     <div className="header-img">
@@ -75,7 +76,10 @@ class Header extends Component {
                                     />
                                 </Route> 
                                 <Route path="/promoter/add-investigator">
-                                    <AddInvestigator />
+                                    <AddInvestigator
+                                        contract = {this.props.contract}
+                                        account = {this.props.account}
+                                    />
                                 </Route>                                       
                             </Switch>
                         </BrowserRouter>
