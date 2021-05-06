@@ -168,30 +168,33 @@ class RegisterProtocol extends Component {
                     {
                         {nb} !== 0
                         ?
-                            <Table celled>
-                                <Table.Header>
-                                    <Table.Row>
-                                        <Table.HeaderCell>ID</Table.HeaderCell>
-                                        <Table.HeaderCell>CID</Table.HeaderCell>
-                                        <Table.HeaderCell>Investigator</Table.HeaderCell>
-                                        <Table.HeaderCell>Authorization</Table.HeaderCell>
-                                        <Table.HeaderCell>Status</Table.HeaderCell>
-                                    </Table.Row>
-                                </Table.Header>
-                                <Table.Body>   
-                                    {
-                                        Tab.map((res, index, arr) =>
-                                            <Table.Row key={index}>
-                                                <Table.Cell>{Tab[index].id}</Table.Cell>
-                                                <Table.Cell>{Tab[index].cid}</Table.Cell>
-                                                <Table.Cell>{Tab[index].investigator}</Table.Cell>
-                                                <Table.Cell textAlign="center">{Tab[index].authorized === false ? <Icon name="hourglass outline" /> : <Icon name='checkmark' /> }</Table.Cell>
-                                                <Table.Cell>{Tab[index].status}</Table.Cell>
-                                            </Table.Row>
-                                        )
-                                    }                                                                           
-                                </Table.Body>
-                            </Table>
+                            <div>
+                                <h2>Protocols</h2>
+                                <Table celled>
+                                    <Table.Header>
+                                        <Table.Row>
+                                            <Table.HeaderCell>ID</Table.HeaderCell>
+                                            <Table.HeaderCell>CID</Table.HeaderCell>
+                                            <Table.HeaderCell>Investigator</Table.HeaderCell>
+                                            <Table.HeaderCell>Authorization</Table.HeaderCell>
+                                            <Table.HeaderCell>Status</Table.HeaderCell>
+                                        </Table.Row>
+                                    </Table.Header>
+                                    <Table.Body>   
+                                        {
+                                            Tab.map((res, index, arr) =>
+                                                <Table.Row key={index}>
+                                                    <Table.Cell>{Tab[index].id}</Table.Cell>
+                                                    <Table.Cell>{Tab[index].cid}</Table.Cell>
+                                                    <Table.Cell>{Tab[index].investigator}</Table.Cell>
+                                                    <Table.Cell textAlign="center">{Tab[index].authorized === false ? <Icon name="hourglass outline" /> : <Icon color='green' name='checkmark' /> }</Table.Cell>
+                                                    <Table.Cell>{Tab[index].status}</Table.Cell>
+                                                </Table.Row>
+                                            )
+                                        }                                                                           
+                                    </Table.Body>
+                                </Table>
+                            </div>
                         :
                             console.log("")
 
