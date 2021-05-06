@@ -28,6 +28,11 @@ contract MedTrials is AccessControl {
         string cid;
     }
 
+    struct Investigator {
+        address investigator;
+        string cid;
+    }
+
     struct Authority {
         address authority;
         string cid;
@@ -37,6 +42,7 @@ contract MedTrials is AccessControl {
     mapping(string => Patient) public patients;
     mapping(uint256 => string) public protocolsID;
     mapping(uint256 => Promoter) public promoters;
+    mapping(uint256 => Investigator) public investigators;
     mapping(uint256 => Authority) public authorities;
     mapping(address => string) roles;
 
@@ -52,6 +58,7 @@ contract MedTrials is AccessControl {
     uint256 public nbOfProtocolsRegistered;
     uint256 public nbOfPatients;
     uint256 public nbOfPromoters;
+    uint256 public nbOfInvestigators;
     uint256 public nbOfAuthorities;
 
     event promoterAdded(address _address);
@@ -138,10 +145,10 @@ contract MedTrials is AccessControl {
         emit promoterAdded(_address);
     }
 
-    function addInvestigator(address _address) public {
+    function addInvestigator(address _address, string memory _cid) public {
         require(
-            hasRole(PROMOTER_ADMIN, msg.sender),
-            "Only the promotor admin can add investigators"
+            hasRole(PROMOTER, msg.sender),
+            "Only the promotor can add investigators"
         );
         require(
             !hasRole(INVESTIGATOR, _address),
@@ -157,6 +164,10 @@ contract MedTrials is AccessControl {
 
         grantRole(INVESTIGATOR, _address);
         roles[_address] = "INVESTIGATOR";
+
+        investigators[nbOfInvestigators].cid = _cid;
+        investigators[nbOfInvestigators].investigator = _address;
+        nbOfInvestigators++;
 
         emit investigatorAdded(_address);
     }

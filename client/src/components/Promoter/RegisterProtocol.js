@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import ReactFileReader from 'react-file-reader';
-import { Button, Form, Icon, Table } from 'semantic-ui-react';
+import { Button, Form, Icon, Table, Header } from 'semantic-ui-react';
 import "./styles/style.css";
 import EncryptData from '../utils/EncryptData';
 import SendToIPFS from '../utils/SendToIPFS';
@@ -104,7 +104,10 @@ class RegisterProtocol extends Component {
         Tab = this.state.protocolsTab;
 
         return (
-            <div>
+            <div className='protocol-render'>
+                <div className='h3-protocol'>
+                    <Header as = 'h3' color='green'>Submit a protocol for validation</Header>
+                </div>
                 <div className="pomoter-form">
                     <Form size="large" onSubmit={this.onFormSubmit}>
                         <Form.Group>
@@ -160,7 +163,7 @@ class RegisterProtocol extends Component {
                         {nb} !== 0
                         ?
                             <div>
-                                <h2>Protocols</h2>
+                                <Header as = 'h3' color='red'>Protocols</Header>
                                 <Table celled>
                                     <Table.Header>
                                         <Table.Row>

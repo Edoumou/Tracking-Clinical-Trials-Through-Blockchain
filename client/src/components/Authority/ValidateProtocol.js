@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button, Table, Icon } from 'semantic-ui-react';
+import { Button, Table, Icon, Header } from 'semantic-ui-react';
 
 class ValidateProtocol extends Component {
     state = {
@@ -57,7 +57,7 @@ class ValidateProtocol extends Component {
                             {nb} !== 0
                             ?
                                 <div>
-                                    <h2>Protocols</h2>
+                                    <Header as = 'h2'>Protocols</Header>
                                     <Table celled>
                                         <Table.Header>
                                             <Table.Row>
@@ -79,7 +79,7 @@ class ValidateProtocol extends Component {
                                                             {
                                                                 Tab[index].authorized === false
                                                                 ?
-                                                                    <Button compact primary onClick = {() => this.onButtonClick(Tab[index].id)}>
+                                                                    <Button compact color='pink' onClick = {() => this.onButtonClick(Tab[index].id)}>
                                                                         Authorize
                                                                     </Button> 
                                                                 :

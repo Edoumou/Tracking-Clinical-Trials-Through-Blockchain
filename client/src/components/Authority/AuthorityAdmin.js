@@ -132,7 +132,7 @@ class AuthorityAdmin extends Component {
                                 onChange={e => this.setState({ company: e.target.value })}
                             />
                             <Form.Field
-                                label='Promoter address'
+                                label='Authority address'
                                 name='address'
                                 value={address}
                                 placeholder="Promoter Address"
