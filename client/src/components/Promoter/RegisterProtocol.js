@@ -17,7 +17,6 @@ class RegisterProtocol extends Component {
         base64: '',
         protocolsTab: [],
         nbOfProtocols: 0,
-        msg: ''
     }
 
     onFormSubmit = async e => {
@@ -30,7 +29,7 @@ class RegisterProtocol extends Component {
         const num = await this.props.contract.methods.getProtocoleNumerotation(
             this.state.center, this.state.category
         ).call({ from: this.props.account });
-        
+
         // compose the protocol ID
         const numStr = String(num);
         let numerotation;
@@ -46,15 +45,9 @@ class RegisterProtocol extends Component {
         const encryptedProtocol = EncryptData(this.state.base64, iv, ENCRYPTION_KEY);
         const cid = await SendToIPFS(encryptedProtocol);
 
-        const receipt = await this.props.contract.methods.registerProtocol(
+        await this.props.contract.methods.registerProtocol(
             protocolID, cid, this.state.center, this.state.category, this.state.investigatorAddress
         ).send({ from: this.props.account });
-
-        console.log("CID =", cid);
-        console.log("RECIPT =", receipt);
-        console.log("NUMEROTATION =", numerotation);
-
-        this.setState({ msg: 'ok' });
 
         await this.getProtocols();
 
@@ -71,7 +64,7 @@ class RegisterProtocol extends Component {
         this.setState({
             base64: files.base64,
             filename: files.fileList[0].name
-        })
+        });
     }
 
     componentDidMount = async () => {
@@ -98,9 +91,7 @@ class RegisterProtocol extends Component {
             struct.promoter = protocol['promoter'];
             struct.investigator = protocol['investigator'];
 
-            if (protocol['promoter'] === this.props.account) {
-                protocolTab.push(struct);
-            }
+            protocolTab.push(struct);
         }
         
         this.setState({ protocolsTab: protocolTab});
@@ -111,9 +102,9 @@ class RegisterProtocol extends Component {
         const nb = this.state.nbOfProtocols;
         let Tab = [];
         Tab = this.state.protocolsTab;
-        console.log("TAB =", Tab);
+
         return (
-            <div className="promoter">             
+            <div>
                 <div className="pomoter-form">
                     <Form size="large" onSubmit={this.onFormSubmit}>
                         <Form.Group>
@@ -163,7 +154,7 @@ class RegisterProtocol extends Component {
                     :
                         console.log("")                    
                 }
-                
+
                 <div className="promoter-tab">
                     {
                         {nb} !== 0
@@ -187,7 +178,15 @@ class RegisterProtocol extends Component {
                                                     <Table.Cell>{Tab[index].id}</Table.Cell>
                                                     <Table.Cell>{Tab[index].cid}</Table.Cell>
                                                     <Table.Cell>{Tab[index].investigator}</Table.Cell>
-                                                    <Table.Cell textAlign="center">{Tab[index].authorized === false ? <Icon name="hourglass outline" /> : <Icon color='green' name='checkmark' /> }</Table.Cell>
+                                                    <Table.Cell textAlign="center">
+                                                        {
+                                                            Tab[index].authorized === false
+                                                            ?
+                                                                <Icon name="hourglass outline" />
+                                                            :
+                                                                <Icon color='green' name='checkmark' />
+                                                        }
+                                                    </Table.Cell>
                                                     <Table.Cell>{Tab[index].status}</Table.Cell>
                                                 </Table.Row>
                                             )
@@ -200,7 +199,6 @@ class RegisterProtocol extends Component {
 
                         }
                 </div>
-                
             </div>
         )
     }

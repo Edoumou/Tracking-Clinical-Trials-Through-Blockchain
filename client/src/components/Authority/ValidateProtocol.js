@@ -9,7 +9,6 @@ class ValidateProtocol extends Component {
     }
 
     onButtonClick = async (id) => {
-        console.log("THE ID =", id);
         await this.props.contract.methods.validateProtocol(id)
             .send({ from: this.props.account });
 
