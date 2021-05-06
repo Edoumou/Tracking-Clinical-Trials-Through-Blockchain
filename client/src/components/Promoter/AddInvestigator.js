@@ -65,7 +65,10 @@ class AddInvestigator extends Component {
             let encodedData = await FetchFromIPFS(investigator.cid, ENCRYPTION_KEY);
             let data = JSON.parse(encodedData);
 
-            investigatorTab.push(data);
+            if (investigator['promoter'] === this.props.account) {
+                investigatorTab.push(data);
+            }
+            
             
         }
 
@@ -108,10 +111,10 @@ class AddInvestigator extends Component {
                                 onChange={e => this.setState({ company: e.target.value })}
                             />
                             <Form.Field
-                                label='Promoter address'
+                                label='Investigator address'
                                 name='address'
                                 value={address}
-                                placeholder="Promoter Address"
+                                placeholder="Investigator Address"
                                 control='input'
                                 width="10"
                                 required

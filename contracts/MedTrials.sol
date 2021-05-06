@@ -29,6 +29,7 @@ contract MedTrials is AccessControl {
     }
 
     struct Investigator {
+        address promoter;
         address investigator;
         string cid;
     }
@@ -166,6 +167,7 @@ contract MedTrials is AccessControl {
         roles[_address] = "INVESTIGATOR";
 
         investigators[nbOfInvestigators].cid = _cid;
+        investigators[nbOfInvestigators].promoter = msg.sender;
         investigators[nbOfInvestigators].investigator = _address;
         nbOfInvestigators++;
 

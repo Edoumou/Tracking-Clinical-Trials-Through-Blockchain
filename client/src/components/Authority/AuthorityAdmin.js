@@ -135,7 +135,7 @@ class AuthorityAdmin extends Component {
                                 label='Authority address'
                                 name='address'
                                 value={address}
-                                placeholder="Promoter Address"
+                                placeholder="Authority Address"
                                 control='input'
                                 width="10"
                                 required

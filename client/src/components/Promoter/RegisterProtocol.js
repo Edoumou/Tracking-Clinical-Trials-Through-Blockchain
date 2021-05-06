@@ -90,8 +90,10 @@ class RegisterProtocol extends Component {
             struct.authorized = protocol['authorized'];
             struct.promoter = protocol['promoter'];
             struct.investigator = protocol['investigator'];
-
-            protocolTab.push(struct);
+            
+            if  (protocol['promoter'] === this.props.account) {
+                protocolTab.push(struct);
+            }
         }
         
         this.setState({ protocolsTab: protocolTab});
