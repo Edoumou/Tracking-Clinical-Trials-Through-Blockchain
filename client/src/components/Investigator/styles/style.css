@@ -1,0 +1,59 @@
+.h3-protocol {
+  margin-top: 30px;
+  margin-bottom: 30px;
+}
+
+.promoter {
+  margin-top: 80px;
+}
+
+.pomoter-form {
+  text-align: left;
+  width: 80%;
+  margin-left: 10%;
+}
+
+.ui.button,
+.ui.buttons .button,
+.ui.buttons .or {
+  font-size: 1.2rem;
+  max-height: 2.5em;
+  margin-top: 23px;
+}
+
+.file-render {
+  margin-top: 60px;
+}
+
+.promoter-admin {
+  margin-bottom: 70px;
+}
+
+.admin-h1 {
+  margin-bottom: 50px;
+}
+
+.admin-form {
+  text-align: left;
+  width: 70%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.promoter-tab {
+  margin-top: 60px;
+}
+
+.admin-grid {
+  margin-top: 80px;
+}
+
+.admin-divider {
+  margin-top: 30px;
+}
+
+.admin-card {
+  width: 350px;
+  margin-bottom: 40px;
+  margin-left: 70px;
+}
