@@ -89,6 +89,8 @@ contract MedTrials is AccessControl {
 
         _setRoleAdmin(INVESTIGATOR, PROMOTER);
 
+        _setRoleAdmin(PATIENT, INVESTIGATOR);
+
         _setupRole(AUTHORITY_ADMIN, _authorityAdmin);
         _setupRole(PROMOTER_ADMIN, _promotorAdmin);
 
@@ -305,6 +307,9 @@ contract MedTrials is AccessControl {
         patients[_patientID].investigator = msg.sender;
         patients[_patientID].protocolID = _protocolID;
         protocols[_protocolID].nbOfPatients++;
+
+        grantRole(PATIENT, _patientAddress);
+        roles[_patientAddress] = "PATIENT";
 
         emit patientAdded(_patientID, _protocolID);
     }
