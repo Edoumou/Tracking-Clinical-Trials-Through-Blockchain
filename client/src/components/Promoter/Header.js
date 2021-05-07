@@ -57,18 +57,18 @@ class Header extends Component {
                   <Button
                     color="orange"
                     as={Link}
-                    to="/promoter/protocol-registration"
+                    to="/promoter/add-investigator"
                   >
-                    Register a protocol
+                    Add Investigators
                   </Button>
                 </Menu.Item>
                 <Menu.Item style={{ fontSize: 12 }}>
                   <Button
                     color="orange"
                     as={Link}
-                    to="/promoter/add-investigator"
+                    to="/promoter/protocol-registration"
                   >
-                    Add Investigators
+                    Register a protocol
                   </Button>
                 </Menu.Item>
               </Menu>
@@ -77,14 +77,14 @@ class Header extends Component {
                 <Route path="/promoter/home">
                   <Home />
                 </Route>
-                <Route path="/promoter/protocol-registration">
-                  <RegisterProtocol
+                <Route path="/promoter/add-investigator">
+                  <AddInvestigator
                     contract={this.props.contract}
                     account={this.props.account}
                   />
                 </Route>
-                <Route path="/promoter/add-investigator">
-                  <AddInvestigator
+                <Route path="/promoter/protocol-registration">
+                  <RegisterProtocol
                     contract={this.props.contract}
                     account={this.props.account}
                   />

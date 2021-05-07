@@ -204,6 +204,10 @@ contract MedTrials is AccessControl {
             "Authorities admin cannot be an investigator"
         );
         require(
+            hasRole(INVESTIGATOR, _investigator),
+            "The investigator must be registered first"
+        );
+        require(
             !protocols[_id].registered,
             "The protocol is already registered"
         );
@@ -219,11 +223,6 @@ contract MedTrials is AccessControl {
         nbOfProtocolsRegistered++;
 
         protocolNumerotation[center][category]++;
-
-        if (!hasRole(INVESTIGATOR, _investigator)) {
-            grantRole(INVESTIGATOR, _investigator);
-            roles[_investigator] = "INVESTIGATOR";
-        }
 
         emit newProtocol(_id, msg.sender, _investigator);
     }
