@@ -5,6 +5,7 @@
   "dependencies": {
     "@openzeppelin/contracts": "^4.0.0",
     "react": "16.11.0",
+    "react-country-region-selector": "^3.0.2",
     "react-dom": "16.11.0",
     "react-file-reader": "^1.1.4",
     "react-router-dom": "^5.2.0",

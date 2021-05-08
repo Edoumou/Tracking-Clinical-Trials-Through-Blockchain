@@ -43,7 +43,7 @@ class Header extends Component {
               </Menu.Item>
               <Menu.Item style={{ fontSize: 12 }}>
                 <Button color="orange" as={Link} to="/investigator/add-data">
-                  Add patient Data
+                  Collect patient Data
                 </Button>
               </Menu.Item>
             </Menu>
