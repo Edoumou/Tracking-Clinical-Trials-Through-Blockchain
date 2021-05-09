@@ -53,10 +53,16 @@ class Header extends Component {
                 <Home />
               </Route>
               <Route path="/investigator/add-patient">
-                <AddPatient />
+                <AddPatient
+                  contract={this.props.contract}
+                  account={this.props.account}
+                />
               </Route>
               <Route path="/investigator/add-data">
-                <CollectData />
+                <CollectData
+                  contract={this.props.contract}
+                  account={this.props.account}
+                />
               </Route>
             </Switch>
           </BrowserRouter>

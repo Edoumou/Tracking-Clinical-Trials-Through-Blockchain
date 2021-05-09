@@ -283,9 +283,10 @@ contract MedTrials is AccessControl {
     }
 
     function addPatient(
+        string memory _cid,
         string memory _patientID,
-        address _patientAddress,
-        string memory _protocolID
+        string memory _protocolID,
+        address _patientAddress
     ) public {
         require(
             hasRole(INVESTIGATOR, msg.sender),
@@ -306,6 +307,7 @@ contract MedTrials is AccessControl {
         patients[_patientID].investigator = msg.sender;
         patients[_patientID].protocolID = _protocolID;
         protocols[_protocolID].nbOfPatients++;
+        patients[_patientID].cids.push(_cid);
 
         grantRole(PATIENT, _patientAddress);
         roles[_patientAddress] = "PATIENT";
