@@ -11,6 +11,7 @@ const ENCRYPTION_KEY = "fpbyr4386v8hpxdruppijkt3v6wayxmi";
 
 class AddPatient extends Component {
   state = {
+    id: "",
     gender: "",
     fullName: "",
     address: "",
@@ -34,7 +35,30 @@ class AddPatient extends Component {
 
   onFormSubmit = async () => {
     await this.getProtocols();
+
+    // store the patient data cid to ethereum
+    const num = await this.props.contract.methods.getPatientNumerotation(
+      this.state.protocol
+    ).call({ from: this.props.account });
+
+    // compose the patient ID
+    const numStr = String(num);
+    let numerotation;
+    if (numStr.length === 1) {
+      numerotation = `00${numStr}`;
+    } else if (numStr.length === 2) {
+      numerotation = `0${numStr}`;
+    } else {
+      numerotation = numStr;
+    }
+
+    const center = this.state.protocol.substring(3, 4)
+    const patientID = `P${center}${numerotation}`;
+
+    this.setState({ id: patientID });
+
     const obj = {
+      id: patientID,
       gender: this.state.value,
       fullName: this.state.fullName,
       address: this.state.address,
@@ -43,26 +67,29 @@ class AddPatient extends Component {
       telephone: this.state.telephone,
       email: this.state.email,
       birth: this.state.birth,
-      ethAddress: this.state.ethAddress
+      ethAddress: this.state.ethAddress,
+      protocol: this.state.protocol
     };
 
-    // store encrypted data to ipfs
+    // encrypt the patient data and store the encrypted data to ipfs
     const encryptedData = EncryptData(JSON.stringify(obj), iv, ENCRYPTION_KEY);
     const cid = await SendToIPFS(encryptedData);
 
-    // store the patient data cid to ethereum
-    await this.props.contract.methods.addPatient()
+    // send the cid of dthe patient fata to ethereum
+    await this.props.contract.methods.addPatient(cid, patientID, this.state.protocol, this.state.ethAddress)
+      .send({ from: this.props.account });
 
 
     this.setState({
-      fullName: "",
-      address: "",
-      city: "",
-      country: "",
-      telephone: "",
-      email: "",
-      birth: "",
-      ethAddress: ""
+      fullName: '',
+      address: '',
+      city: '',
+      country: '',
+      telephone: '',
+      email: '',
+      birth: '',
+      ethAddress: '',
+      protocol: ''
     });
   };
 
@@ -171,7 +198,7 @@ class AddPatient extends Component {
                   control="input"
                   required
                   placeholder="0x000..."
-                  onChange={(e) => this.setState({ fullName: e.target.value })}
+                  onChange={(e) => this.setState({ ethAddress: e.target.value })}
                 />
                 <Form.Field
                   label="Full name"

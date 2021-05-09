@@ -7,20 +7,20 @@ contract MedTrials is AccessControl {
     struct Protocol {
         string cid;
         address promoter;
+        string status;
         address investigator;
         bool registered;
         bool authorized;
         uint256 nbOfPatients;
         uint256 index;
-        string status;
     }
 
     struct Patient {
         address patient;
         address investigator;
         string protocolID;
-        bool consent;
         string[] cids;
+        bool consent;
     }
 
     struct Promoter {
@@ -48,6 +48,7 @@ contract MedTrials is AccessControl {
     mapping(address => string) roles;
 
     mapping(string => mapping(string => uint256)) private protocolNumerotation;
+    mapping(address => mapping(string => uint256)) private patientNumerotation;
 
     bytes32 public constant AUTHORITY = keccak256("AUTHORITY");
     bytes32 public constant AUTHORITY_ADMIN = keccak256("AUTHORITYADMIN");
@@ -309,25 +310,12 @@ contract MedTrials is AccessControl {
         protocols[_protocolID].nbOfPatients++;
         patients[_patientID].cids.push(_cid);
 
+        patientNumerotation[msg.sender][_protocolID]++;
+
         grantRole(PATIENT, _patientAddress);
         roles[_patientAddress] = "PATIENT";
 
         emit patientAdded(_patientID, _protocolID);
-    }
-
-    function giveConsent(string memory _patientID) public {
-        require(
-            msg.sender == patients[_patientID].patient,
-            "Your ID is not correct"
-        );
-        require(
-            patients[_patientID].consent == false,
-            "You did not consent yet"
-        );
-
-        patients[_patientID].consent == true;
-
-        emit consentGiven(_patientID);
     }
 
     function revokeConsent(string memory _patientID) public {
@@ -437,5 +425,13 @@ contract MedTrials is AccessControl {
         string memory category
     ) public view returns (uint256) {
         return protocolNumerotation[center][category] + 1;
+    }
+
+    function getPatientNumerotation(string memory _protocolID)
+        public
+        view
+        returns (uint256)
+    {
+        return patientNumerotation[msg.sender][_protocolID] + 1;
     }
 }
