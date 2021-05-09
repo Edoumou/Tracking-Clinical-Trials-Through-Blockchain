@@ -42,6 +42,7 @@ contract MedTrials is AccessControl {
     mapping(string => Protocol) public protocols;
     mapping(string => Patient) public patients;
     mapping(uint256 => string) public protocolsID;
+    mapping(uint256 => string) public patientsID;
     mapping(uint256 => Promoter) public promoters;
     mapping(uint256 => Investigator) public investigators;
     mapping(uint256 => Authority) public authorities;
@@ -234,17 +235,9 @@ contract MedTrials is AccessControl {
         returns (string memory)
     {
         require(
-            hasRole(PROMOTER, msg.sender) || hasRole(INVESTIGATOR, msg.sender),
-            "only promoters and investigators have this right"
-        );
-        require(
             protocols[_id].promoter == msg.sender ||
                 protocols[_id].investigator == msg.sender,
             "You do not have right to open this project"
-        );
-        require(
-            protocols[_id].authorized,
-            "There is no protocol with this cid"
         );
 
         return protocols[_id].cid;
@@ -254,10 +247,6 @@ contract MedTrials is AccessControl {
         require(
             hasRole(AUTHORITY, msg.sender),
             "Only authorities have right to validate protocols"
-        );
-        require(
-            protocols[_id].registered == true,
-            "There is no protocol associated with this ID"
         );
 
         protocols[_id].authorized = true;
@@ -271,15 +260,6 @@ contract MedTrials is AccessControl {
         view
         returns (Protocol memory)
     {
-        require(
-            protocols[_id].registered == true,
-            "There is no protocol with this id"
-        );
-        require(
-            protocols[_id].authorized == true,
-            "This protocol hs not been validated yet"
-        );
-
         return protocols[_id];
     }
 
@@ -301,7 +281,10 @@ contract MedTrials is AccessControl {
             msg.sender == protocols[_protocolID].investigator,
             "You do not have right to add patients to this protocol"
         );
-        //require(_patientAddress != protocols[_protocolID].patient, "This patient already exist");
+        require(
+            _patientAddress != patients[_patientID].patient,
+            "This patient already exist"
+        );
 
         patients[_patientID].consent = true;
         patients[_patientID].patient = _patientAddress;
@@ -310,6 +293,7 @@ contract MedTrials is AccessControl {
         protocols[_protocolID].nbOfPatients++;
         patients[_patientID].cids.push(_cid);
 
+        patientsID[nbOfPatients] = _patientID;
         patientNumerotation[msg.sender][_protocolID]++;
 
         grantRole(PATIENT, _patientAddress);
@@ -350,7 +334,7 @@ contract MedTrials is AccessControl {
     function resumeTrials(string memory _protocolID) public {
         require(
             hasRole(AUTHORITY, msg.sender),
-            "Only authoriities can suspend trials"
+            "Only authorities can suspend trials"
         );
         require(!protocols[_protocolID].authorized);
 
@@ -392,10 +376,6 @@ contract MedTrials is AccessControl {
             msg.sender == patients[_patientID].investigator,
             "You do not have right for this patient"
         );
-        require(
-            patients[_patientID].consent == true,
-            "Get the patient consent first"
-        );
 
         return patients[_patientID].cids;
     }
@@ -406,14 +386,6 @@ contract MedTrials is AccessControl {
         returns (string memory)
     {
         return protocols[_protocolID].status;
-    }
-
-    function numberOfPatientByProtocol(string memory _protocolID)
-        public
-        view
-        returns (uint256)
-    {
-        return protocols[_protocolID].nbOfPatients;
     }
 
     function getRole(address _address) public view returns (string memory) {

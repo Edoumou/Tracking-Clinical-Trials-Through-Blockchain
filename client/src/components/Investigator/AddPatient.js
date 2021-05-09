@@ -75,9 +75,21 @@ class AddPatient extends Component {
     const encryptedData = EncryptData(JSON.stringify(obj), iv, ENCRYPTION_KEY);
     const cid = await SendToIPFS(encryptedData);
 
-    // send the cid of dthe patient fata to ethereum
+    console.log("CID =", cid);
+    console.log("Patient ID =", patientID);
+    console.log("Protocol ID =", this.state.protocol);
+    console.log("Patient address =", this.state.ethAddress);
+
+    // send the cid of the patient data to ethereum
     await this.props.contract.methods.addPatient(cid, patientID, this.state.protocol, this.state.ethAddress)
       .send({ from: this.props.account });
+
+    const patient = await this.props.contract.methods.patients(patientID).call({ from: this.props.account });
+
+    console.log("PATIENT =", patient);
+
+    const patCID = await this.props.contract.methods.getDataCID(patientID).call({ from: this.props.account });
+    console.log("PATIENT CID =", patCID);
 
 
     this.setState({
