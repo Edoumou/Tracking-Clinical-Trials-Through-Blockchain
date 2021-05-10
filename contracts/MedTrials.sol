@@ -296,6 +296,8 @@ contract MedTrials is AccessControl {
         patientsID[nbOfPatients] = _patientID;
         patientNumerotation[msg.sender][_protocolID]++;
 
+        nbOfPatients++;
+
         grantRole(PATIENT, _patientAddress);
         roles[_patientAddress] = "PATIENT";
 

@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Grid, Header, Form, Button, Radio, Select } from "semantic-ui-react";
+import { Grid, Table, Header, Form, Button, Radio, Select, Icon } from "semantic-ui-react";
 import { CountryDropdown } from "react-country-region-selector";
 import EncryptData from "../utils/EncryptData";
 import SendToIPFS from "../utils/SendToIPFS";
@@ -23,7 +23,9 @@ class AddPatient extends Component {
     ethAddress: "",
     protocol: '',
     nbOfProtocols: 0,
+    nbOfPatients: 0,
     protocolsTab: [],
+    patientsTab: [],
     options: []
   };
 
@@ -34,7 +36,6 @@ class AddPatient extends Component {
   };
 
   onFormSubmit = async () => {
-    await this.getProtocols();
 
     // store the patient data cid to ethereum
     const num = await this.props.contract.methods.getPatientNumerotation(
@@ -91,6 +92,8 @@ class AddPatient extends Component {
     const patCID = await this.props.contract.methods.getDataCID(patientID).call({ from: this.props.account });
     console.log("PATIENT CID =", patCID);
 
+    await this.getProtocols();
+    await this.getPatients();
 
     this.setState({
       fullName: '',
@@ -131,27 +134,59 @@ class AddPatient extends Component {
         obj.authorized = protocol["authorized"];
         obj.nbOfPatients = protocol["nbOfPatients"];
         obj.status = protocol["status"];
+        obj.promoter = protocol["promoter"];
 
         option.key = id;
         option.text = id;
         option.value = id;
 
-
         protocols.push(obj);
         options.push(option);
       }
-
-      this.setState({
-        protocolsTab: protocols,
-        options: options
-      });
-      console.log("PROTOCOLS =", this.state.protocolsTab);
-      console.log("OPTIONS =", this.state.options);
     }
+
+    this.setState({
+      protocolsTab: protocols,
+      options: options
+    });
+    console.log("PROTOCOLS =", this.state.protocolsTab);
+    console.log("OPTIONS =", this.state.options);
+  }
+
+  getPatients = async () => {
+    // get the number of registered patients
+    const nb = await this.props.contract.methods.nbOfPatients()
+      .call({ from: this.props.account });
+    this.setState({ nbOfPatients: nb });
+    console.log("NB OF PATIENTS =", nb);
+    let patients = [];
+
+    for (let i = 0; i < nb; i++) {
+      const id = await this.props.contract.methods.patientsID(i)
+        .call({ from: this.props.account });
+
+      const patient = await this.props.contract.methods.patients(id)
+        .call({ from: this.props.account });
+
+      if (patient["investigator"] === this.props.account) {
+        const obj = {};
+
+        obj.id = id;
+        obj.protocolID = patient["protocolID"];
+        obj.address = patient["patient"];
+        obj.consent = patient["consent"];
+
+        patients.push(obj);
+      }
+    }
+
+    this.setState({ patientsTab: patients });
+    console.log("PATIENTS =", this.state.patientsTab);
   }
 
   componentDidMount = async () => {
     await this.getProtocols();
+    await this.getPatients();
   }
 
   render() {
@@ -168,17 +203,108 @@ class AddPatient extends Component {
       protocol
     } = this.state;
 
+    const nb = this.state.nbOfProtocols;
+    const nb2 = this.state.nbOfProtocols;
+
+    let protocolTab = [];
+    let patientTab = [];
+
+    protocolTab = this.state.protocolsTab;
+    patientTab = this.state.patientsTab;
+
     return (
       <div className="investigator-patient">
         <Grid divided relaxed textAlign="left">
           <Grid.Row>
             <Grid.Column width={10}>
               <div className="investigator-form-h2">
-                <Header as="h2" color="brown">
-                  List of patients
-                </Header>
+
+                <div className="protocol-list">
+                  <Header as="h2" color="brown">
+                    List of protocols
+                  </Header>
+
+                  {
+                    { nb } !== 0
+                      ?
+                      <div>
+                        <Table celled>
+                          <Table.Header>
+                            <Table.Row>
+                              <Table.HeaderCell>ID</Table.HeaderCell>
+                              <Table.HeaderCell>nb of patients</Table.HeaderCell>
+                              <Table.HeaderCell>status</Table.HeaderCell>
+                              <Table.HeaderCell>Promotor address</Table.HeaderCell>
+                            </Table.Row>
+                          </Table.Header>
+                          <Table.Body>
+                            {
+                              protocolTab.map((res, index, arr) =>
+                                <Table.Row key={protocolTab[index].id}>
+                                  <Table.Cell>{protocolTab[index].id}</Table.Cell>
+                                  <Table.Cell textAlign='center'>{protocolTab[index].nbOfPatients}</Table.Cell>
+                                  <Table.Cell>{protocolTab[index].status}</Table.Cell>
+                                  <Table.Cell>{protocolTab[index].promoter}</Table.Cell>
+                                </Table.Row>
+                              )
+                            }
+                          </Table.Body>
+                        </Table>
+                      </div>
+                      :
+                      console.log('')
+                  }
+                </div>
+
+                <div className='patient-list'>
+                  <Header as="h2" color="brown">
+                    List of patients
+                  </Header>
+
+                  {
+                    { nb2 } !== 0
+                      ?
+                      <div>
+                        <Table celled>
+                          <Table.Header>
+                            <Table.Row>
+                              <Table.HeaderCell>ID</Table.HeaderCell>
+                              <Table.HeaderCell>Consent</Table.HeaderCell>
+                              <Table.HeaderCell>Protocol ID</Table.HeaderCell>
+                              <Table.HeaderCell>Address</Table.HeaderCell>
+                            </Table.Row>
+                          </Table.Header>
+                          <Table.Body>
+                            {
+                              patientTab.map((res, index, arr) =>
+                                <Table.Row key={patientTab[index].id}>
+                                  <Table.Cell>{patientTab[index].id}</Table.Cell>
+                                  <Table.Cell textAlign='center'>
+                                    {
+                                      patientTab[index].consent
+                                        ?
+                                        <Icon color='green' name='checkmark' />
+                                        :
+                                        <Icon name="hourglass outline" />
+                                    }
+                                  </Table.Cell>
+                                  <Table.Cell>{patientTab[index].protocolID}</Table.Cell>
+                                  <Table.Cell>{patientTab[index].address}</Table.Cell>
+                                </Table.Row>
+                              )
+                            }
+                          </Table.Body>
+                        </Table>
+                      </div>
+                      :
+                      console.log('')
+                  }
+
+                </div>
+
               </div>
             </Grid.Column>
+
             <Grid.Column width={6}>
               <div className="investigator-form-h2">
                 <Header as="h2" color="brown">
