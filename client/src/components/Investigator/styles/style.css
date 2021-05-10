@@ -74,8 +74,18 @@
 }
 
 .file-load {
-  width: 13%;
-  margin-left: auto;
+  width: 3040;
   margin-right: auto;
-  margin-top: 30px;
+}
+
+.patient-data {
+  margin-top: 100px;
+}
+
+.sent-data-btn {
+  margin-right: 80px;
+}
+
+.seg-right-patient {
+  margin-right: 80px;
 }

@@ -407,8 +407,8 @@ class AddPatient extends Component {
                   options={this.state.options}
                   onChange={(e, data) => this.setState({ protocol: data.value })}
                 />
-                <Button type="submit" color="brown">
-                  Submit
+                <Button floated='left' icon labelPosition='left' primary size='small'>
+                  <Icon name='user' /> Add Patient
                 </Button>
               </Form>
             </Grid.Column>
