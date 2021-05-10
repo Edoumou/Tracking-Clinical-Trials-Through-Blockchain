@@ -4,7 +4,7 @@ class CollectData extends Component {
   render() {
     return (
       <div>
-        <h1>Collect Data</h1>
+        <h1>Lnet's go</h1>
       </div>
     );
   }
