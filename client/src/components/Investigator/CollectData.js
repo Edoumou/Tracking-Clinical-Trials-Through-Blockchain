@@ -7,23 +7,22 @@ import "./styles/style.css";
 class CollectData extends Component {
   state = {
     base64: '',
-    cols: '',
-    rows: '',
-    data: {}
+    data: [],
+    msg: ''
   }
 
   onLoadFile = async files => {
     this.setState({ base64: files.base64 });
 
-    ExcelRenderer(files.fileList[0], (err, res) => {
+    await ExcelRenderer(files.fileList[0], (err, res) => {
       if (err) {
         console.log("Error : ", err);
       } else {
-        console.log("ROWS =", res.rows)
+        console.log("ROWS =", res.rows);
         this.setState({
-          cols: res.cols,
-          rows: res.rows
-        })
+          data: res.rows
+        });
+        this.setState({ msg: 'ok' });
       }
     });
 
