@@ -72,3 +72,10 @@
 .protocol-list {
   margin-bottom: 60px;
 }
+
+.file-load {
+  width: 13%;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 30px;
+}
