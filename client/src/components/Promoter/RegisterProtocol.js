@@ -81,7 +81,7 @@ class RegisterProtocol extends Component {
             const id = await this.props.contract.methods.protocolsID(i).call({ from: this.props.account });
 
             const protocol = await this.props.contract.methods.protocols(id)
-                .call({ from:  this.props.account });
+                .call({ from: this.props.account });
 
             let struct = {};
             struct.id = id;
@@ -90,13 +90,13 @@ class RegisterProtocol extends Component {
             struct.authorized = protocol['authorized'];
             struct.promoter = protocol['promoter'];
             struct.investigator = protocol['investigator'];
-            
-            if  (protocol['promoter'] === this.props.account) {
+
+            if (protocol['promoter'] === this.props.account) {
                 protocolTab.push(struct);
             }
         }
-        
-        this.setState({ protocolsTab: protocolTab});
+
+        this.setState({ protocolsTab: protocolTab });
     }
 
     render() {
@@ -108,17 +108,17 @@ class RegisterProtocol extends Component {
         return (
             <div className='protocol-render'>
                 <div className='h3-protocol'>
-                    <Header as = 'h3' color='green'>Submit a protocol for validation</Header>
+                    <Header as='h3' color='green'>Submit a protocol for validation</Header>
                 </div>
                 <div className="pomoter-form">
                     <Form size="large" onSubmit={this.onFormSubmit}>
                         <Form.Group>
                             <Form.Field width="4">
-                                <ReactFileReader fileTypes={[".csv", ".xlsx", ".pdf",".zip"]} base64={true} handleFiles = {this.handleFiles}>
+                                <ReactFileReader fileTypes={[".csv", ".xlsx", ".pdf", ".zip"]} base64={true} handleFiles={this.handleFiles}>
                                     <button className="ui brown button">
-                                    Select the protocol file
+                                        Select the protocol file
                                     </button>
-                                </ReactFileReader>   
+                                </ReactFileReader>
                             </Form.Field>
                             <Form.Field label='Center' name='center' value={center} control='select' width="2" required onChange={e => this.setState({ center: e.target.value })}>
                                 <option value=''></option>
@@ -144,28 +144,28 @@ class RegisterProtocol extends Component {
                                 required
                                 onChange={e => this.setState({ investigatorAddress: e.target.value })}
                             />
-                            <Button primary>Submit</Button>          
+                            <Button primary>Submit</Button>
                         </Form.Group>
-                    </Form>              
+                    </Form>
                 </div>
 
                 {
                     this.state.base64 !== ''
-                    ?
+                        ?
                         <div className="file-render">
                             <h3>{this.state.filename}</h3>
-                            <embed src={this.state.base64}  type="application/pdf" width="50%" height="850px" scrolling = "no"></embed>
+                            <embed src={this.state.base64} type="application/pdf" width="50%" height="850px" scrolling="no"></embed>
                         </div>
-                    :
-                        console.log("")                    
+                        :
+                        console.log("")
                 }
 
                 <div className="promoter-tab">
                     {
-                        {nb} !== 0
-                        ?
+                        { nb } !== 0
+                            ?
                             <div>
-                                <Header as = 'h3' color='red'>Protocols</Header>
+                                <Header as='h3' color='red'>Protocols</Header>
                                 <Table celled>
                                     <Table.Header>
                                         <Table.Row>
@@ -176,7 +176,7 @@ class RegisterProtocol extends Component {
                                             <Table.HeaderCell>Status</Table.HeaderCell>
                                         </Table.Row>
                                     </Table.Header>
-                                    <Table.Body>   
+                                    <Table.Body>
                                         {
                                             Tab.map((res, index, arr) =>
                                                 <Table.Row key={index}>
@@ -186,23 +186,23 @@ class RegisterProtocol extends Component {
                                                     <Table.Cell textAlign="center">
                                                         {
                                                             Tab[index].authorized === false
-                                                            ?
+                                                                ?
                                                                 <Icon name="hourglass outline" />
-                                                            :
+                                                                :
                                                                 <Icon color='green' name='checkmark' />
                                                         }
                                                     </Table.Cell>
                                                     <Table.Cell>{Tab[index].status}</Table.Cell>
                                                 </Table.Row>
                                             )
-                                        }                                                                           
+                                        }
                                     </Table.Body>
                                 </Table>
                             </div>
-                        :
+                            :
                             console.log("")
 
-                        }
+                    }
                 </div>
             </div>
         )

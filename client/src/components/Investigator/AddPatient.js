@@ -3,7 +3,6 @@ import { Grid, Table, Header, Form, Button, Radio, Select, Icon } from "semantic
 import { CountryDropdown } from "react-country-region-selector";
 import EncryptData from "../utils/EncryptData";
 import SendToIPFS from "../utils/SendToIPFS";
-import FetchFromIPFS from "../utils/FetchFromIPFS";
 import "./styles/style.css";
 
 const iv = 16;
@@ -199,8 +198,7 @@ class AddPatient extends Component {
       email,
       birth,
       ethAddress,
-      value,
-      protocol
+      value
     } = this.state;
 
     const nb = this.state.nbOfProtocols;
@@ -285,7 +283,7 @@ class AddPatient extends Component {
                                         ?
                                         <Icon color='green' name='checkmark' />
                                         :
-                                        <Icon name="hourglass outline" />
+                                        <Icon color='red' name="x" />
                                     }
                                   </Table.Cell>
                                   <Table.Cell>{patientTab[index].protocolID}</Table.Cell>
