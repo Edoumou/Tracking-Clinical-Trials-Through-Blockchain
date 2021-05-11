@@ -63,6 +63,7 @@ class CollectData extends Component {
 
   onButtonClick = () => {
     console.log("DATA = ", this.state.data);
+    this.setState({ filename: '' });
   }
 
   render() {
