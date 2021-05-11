@@ -1,11 +1,17 @@
 import React, { Component } from "react";
 import { Header, Grid, Button, Icon, Segment, Table } from "semantic-ui-react";
 import ReactFileReader from 'react-file-reader';
-import { OutTable, ExcelRenderer } from 'react-excel-renderer';
+import { ExcelRenderer } from 'react-excel-renderer';
+import EncryptData from "../utils/EncryptData";
+import SendToIPFS from "../utils/SendToIPFS";
 import "./styles/style.css";
+
+const iv = 16;
+const ENCRYPTION_KEY = 'fpbyr4386v8hpxdruppijkt3v6wayxmi';
 
 class CollectData extends Component {
   state = {
+    ID: '',
     filename: '',
     base64: '',
     data: [],
@@ -41,23 +47,16 @@ class CollectData extends Component {
     for (let i = 0; i < 4; i++) {
       Tab[i] = [];
     }
-    console.log("TAB BEFORE =", Tab);
-    console.log("NB OF OBSERVATION =", this.state.nbObservation);
+
     for (let i = 3; i < 7; i++) {
       for (let j = 0; j < this.state.nbObservation + 1; j++) {
         Tab[i - 3][j] = this.state.data[i][j + 2];
       }
-
-      console.log(this.state.data[i][2], this.state.data[i][3]);
     }
 
-    this.setState({ numericalData: Tab });
-    console.log("TAB AFTER =", this.state.numericalData);
-
-    this.state.numericalData.map((res, index, arr) => {
-      for (let i = 0; i < this.state.nbObservation + 1; i += 2) {
-        //console.log(res[i], res[i + 1]);
-      }
+    this.setState({
+      ID: this.state.data[9][1],
+      numericalData: Tab
     });
 
     // define the header
@@ -68,13 +67,32 @@ class CollectData extends Component {
 
     this.setState({ header: head });
 
-    console.log("HEADER =", this.state.header);
-
   }
 
-  onButtonClick = () => {
+  onButtonClick = async () => {
     console.log("DATA = ", this.state.data);
-    this.setState({ filename: '' });
+    console.log("BASE64 =", this.state.base64);
+
+    const obj = {
+      data: this.state.base64
+    }
+
+    console.log(JSON.stringify(obj));
+
+    const encryptedData = EncryptData(JSON.stringify(obj), iv, ENCRYPTION_KEY);
+    const cid = await SendToIPFS(encryptedData);
+
+    const receipt = await this.props.contract.methods.storeDataCID(this.state.ID, cid)
+      .send({ from: this.props.account });
+
+    console.log("ID =", this.state.ID)
+    console.log("CID =", cid);
+    console.log("RECEIPT =", receipt);
+
+    this.setState({
+      filename: '',
+      header: []
+    });
   }
 
   render() {
@@ -90,7 +108,7 @@ class CollectData extends Component {
               <Segment.Group horizontal>
                 <Segment floated='left'>
                   <div className="file-load">
-                    <ReactFileReader fileTypes={[".csv", ".xlsx", ".pdf", ".pdf"]} base64={true} multipleFiles={true} handleFiles={this.onLoadFile}>
+                    <ReactFileReader fileTypes={[".csv", ".xlsx", ".pdf", ".zip"]} base64={true} multipleFiles={true} handleFiles={this.onLoadFile}>
                       <Button type="submit" color="brown">
                         Upload the file
                       </Button>

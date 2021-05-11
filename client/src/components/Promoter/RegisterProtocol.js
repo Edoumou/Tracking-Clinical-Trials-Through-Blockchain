@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import ReactFileReader from 'react-file-reader';
 import { Button, Form, Icon, Table, Header } from 'semantic-ui-react';
-import "./styles/style.css";
 import EncryptData from '../utils/EncryptData';
 import SendToIPFS from '../utils/SendToIPFS';
+import "./styles/style.css";
 
 const iv = 16;
 const ENCRYPTION_KEY = 'fpbyr4386v8hpxdruppijkt3v6wayxmi';
