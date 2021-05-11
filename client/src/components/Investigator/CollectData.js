@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Header, Grid, Button, Icon, Segment } from "semantic-ui-react";
+import { Header, Grid, Button, Icon, Segment, Table } from "semantic-ui-react";
 import ReactFileReader from 'react-file-reader';
 import { OutTable, ExcelRenderer } from 'react-excel-renderer';
 import "./styles/style.css";
@@ -11,7 +11,8 @@ class CollectData extends Component {
     data: [],
     msg: '',
     nbObservation: 0,
-    numericalData: []
+    numericalData: [],
+    header: []
   }
 
   onLoadFile = async files => {
@@ -55,9 +56,19 @@ class CollectData extends Component {
 
     this.state.numericalData.map((res, index, arr) => {
       for (let i = 0; i < this.state.nbObservation + 1; i += 2) {
-        console.log(res[i], res[i + 1]);
+        //console.log(res[i], res[i + 1]);
       }
-    })
+    });
+
+    // define the header
+    let head = [];
+    for (let i = 0; i < this.state.nbObservation; i++) {
+      head[i] = `Trial ${i + 1}`;
+    }
+
+    this.setState({ header: head });
+
+    console.log("HEADER =", this.state.header);
 
   }
 
@@ -111,6 +122,41 @@ class CollectData extends Component {
                   }
                 </Segment>
               </Segment.Group>
+
+              {
+                this.state.header.length !== 0
+                  ?
+                  <div className='trial-tab'>
+                    <Table celled definition>
+                      <Table.Header>
+                        <Table.Row>
+                          <Table.HeaderCell />
+                          {
+                            this.state.header.map((res, index) =>
+                              <Table.HeaderCell key={index}>{res}</Table.HeaderCell>
+                            )
+                          }
+                        </Table.Row>
+                      </Table.Header>
+
+                      <Table.Body>
+                        {
+                          this.state.numericalData.map((res, index, arr) =>
+                            <Table.Row key={index}>
+                              {
+                                res.map((r, i, a) =>
+                                  <Table.Cell key={i} textAlign='right'>{r}</Table.Cell>
+                                )
+                              }
+                            </Table.Row>
+                          )
+                        }
+                      </Table.Body>
+                    </Table>
+                  </div>
+                  :
+                  console.log('')
+              }
 
             </Grid.Column>
 
