@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { Header, Grid, Button, Icon, Segment, Table } from "semantic-ui-react";
 import ReactFileReader from 'react-file-reader';
 import { ExcelRenderer } from 'react-excel-renderer';
+import fileDownload from 'js-file-download';
 import EncryptData from "../utils/EncryptData";
 import SendToIPFS from "../utils/SendToIPFS";
 import "./styles/style.css";
@@ -18,7 +19,8 @@ class CollectData extends Component {
     msg: '',
     nbObservation: 0,
     numericalData: [],
-    header: []
+    header: [],
+    showfile: false
   }
 
   onLoadFile = async files => {
@@ -77,8 +79,6 @@ class CollectData extends Component {
       data: this.state.base64
     }
 
-    console.log(JSON.stringify(obj));
-
     const encryptedData = EncryptData(JSON.stringify(obj), iv, ENCRYPTION_KEY);
     const cid = await SendToIPFS(encryptedData);
 
@@ -91,7 +91,8 @@ class CollectData extends Component {
 
     this.setState({
       filename: '',
-      header: []
+      header: [],
+      showfile: true
     });
   }
 
@@ -184,6 +185,22 @@ class CollectData extends Component {
 
           </Grid.Row>
         </Grid>
+
+        {
+          this.state.showfile
+            ?
+            <div className='patient-data-file'>
+              <iframe
+                type="data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+                src={this.state.base64}
+                width="0"
+                height="0"
+              />
+            </div>
+            :
+            console.log('')
+        }
+
 
       </div>
     );

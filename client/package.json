@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "@openzeppelin/contracts": "^4.0.0",
+    "js-file-download": "^0.4.12",
     "react": "16.11.0",
     "react-country-region-selector": "^3.0.2",
     "react-dom": "16.11.0",
