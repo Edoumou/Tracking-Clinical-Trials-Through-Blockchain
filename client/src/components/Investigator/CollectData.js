@@ -1,10 +1,11 @@
 import React, { Component } from "react";
-import { Header, Grid, Button, Icon, Segment, Table } from "semantic-ui-react";
+import { Header, Grid, Button, Icon, Segment, Table, Form, Select } from "semantic-ui-react";
 import ReactFileReader from 'react-file-reader';
 import { ExcelRenderer } from 'react-excel-renderer';
 import fileDownload from 'js-file-download';
 import EncryptData from "../utils/EncryptData";
 import SendToIPFS from "../utils/SendToIPFS";
+import FetchFromIPFS from "../utils/FetchFromIPFS";
 import "./styles/style.css";
 
 const iv = 16;
@@ -17,10 +18,18 @@ class CollectData extends Component {
     base64: '',
     data: [],
     msg: '',
+    msg1: '',
     nbObservation: 0,
     numericalData: [],
     header: [],
-    showfile: false
+    showfile: false,
+    nbOfPatients: 0,
+    patient: '',
+    cid: '',
+    listOfPatients: [],
+    options: [],
+    cidOptions: [],
+    dataFromIPFS: []
   }
 
   onLoadFile = async files => {
@@ -96,6 +105,73 @@ class CollectData extends Component {
     });
   }
 
+  getPatients = async () => {
+    // get the number of registered patients
+    const nb = await this.props.contract.methods.nbOfPatients()
+      .call({ from: this.props.account });
+
+    let options = [];
+
+    for (let i = 0; i < nb; i++) {
+      const id = await this.props.contract.methods.patientsID(i)
+        .call({ from: this.props.account });
+
+      const patient = await this.props.contract.methods.patients(id)
+        .call({ from: this.props.account });
+
+      if (patient["investigator"] === this.props.account) {
+        const option = {};
+        option.key = id;
+        option.text = id;
+        option.value = id;
+
+        options.push(option);
+      }
+    }
+
+    await this.setState({ options: options });
+
+    console.log("Patient =", this.state.patient);
+  }
+
+  componentDidMount = async () => {
+    await this.getPatients();
+  }
+
+  onPatientButtonClick = async () => {
+    this.setState({ msg1: 'ok' });
+    console.log("Patient =", this.state.patient);
+
+    let Tab = [];
+    Tab = await this.props.contract.methods.getDataCID(this.state.patient)
+      .call({ from: this.props.account });
+
+    const options = [];
+    Tab.map((res, index, arr) => {
+      if (index !== 0) {
+        const option = {};
+        option.key = index;
+        option.text = index;
+        option.value = res;
+
+        options.push(option);
+      }
+    })
+
+    this.setState({ cidOptions: options });
+
+    console.log("CIDs =", Tab);
+    console.log("OPTIONS TAB =", this.state.cidOptions);
+  }
+
+  onCIDButtonClick = async () => {
+    let data = await FetchFromIPFS(this.state.cid, ENCRYPTION_KEY);
+    this.setState({ dataFromIPFS: JSON.parse(data).data })
+
+    console.log('SELECTED CID =', this.state.cid);
+    console.log('DATA FROM IPFS =', this.state.dataFromIPFS);
+  }
+
   render() {
     return (
       <div className='patient-data'>
@@ -103,7 +179,7 @@ class CollectData extends Component {
           <Grid.Row>
 
             <Grid.Column width={8}>
-              <Header as='h2' color='blue'>
+              <Header as='h2' color='violet'>
                 Upload the file that contains new data
               </Header>
               <Segment.Group horizontal>
@@ -180,7 +256,55 @@ class CollectData extends Component {
             </Grid.Column>
 
             <Grid.Column width={8}>
+              <Header as='h2' color='violet'>
+                Consult patient Data
+              </Header>
 
+              <div>
+                <Form size="large">
+                  <Form.Group>
+                    <Form.Field
+                      control={Select}
+                      name='patient'
+                      label='Select patient'
+                      required
+                      options={this.state.options}
+                      onChange={(e, data) => this.setState({ patient: data.value })}
+                    />
+                    <Button primary onClick={this.onPatientButtonClick}>
+                      Get List of CIDs
+                    </Button>
+                  </Form.Group>
+                  {
+                    this.state.msg1 !== ''
+                      ?
+                      <Form.Group>
+                        <Form.Field
+                          control={Select}
+                          name='cid'
+                          label='Observation number'
+                          required
+                          options={this.state.cidOptions}
+                          onChange={(e, data) => this.setState({ cid: data.value })}
+                        />
+                        <Button primary onClick={this.onCIDButtonClick}>
+                          Downold data
+                        </Button>
+                      </Form.Group>
+                      :
+                      console.log('')
+                  }
+
+                </Form>
+              </div>
+              <div className='patient-data-file'>
+                <iframe
+                  type="data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+                  src={this.state.dataFromIPFS}
+                  width="0"
+                  height="0"
+                />
+              </div>
             </Grid.Column>
 
           </Grid.Row>
