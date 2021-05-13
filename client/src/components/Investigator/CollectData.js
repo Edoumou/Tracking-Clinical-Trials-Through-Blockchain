@@ -362,7 +362,7 @@ class CollectData extends Component {
                     <Form.Field
                       control={Select}
                       name='patient'
-                      label='Select patient'
+                      label='Patient ID'
                       required
                       options={this.state.options}
                       onChange={(e, data) => this.setState({ patient: data.value })}
@@ -378,7 +378,7 @@ class CollectData extends Component {
                         <Form.Field
                           control={Select}
                           name='cid'
-                          label='Observation number'
+                          label='Trial number'
                           required
                           options={this.state.cidOptions}
                           onChange={(e, data) => this.setState({ cid: data.value })}
