@@ -6,6 +6,7 @@ import fileDownload from 'js-file-download';
 import EncryptData from "../utils/EncryptData";
 import SendToIPFS from "../utils/SendToIPFS";
 import FetchFromIPFS from "../utils/FetchFromIPFS";
+import Chart from '../charts/Chart';
 import "./styles/style.css";
 
 const iv = 16;
@@ -19,6 +20,7 @@ class CollectData extends Component {
     data: [],
     msg: '',
     msg1: '',
+    msg2: '',
     nbObservation: 0,
     numericalData: [],
     header: [],
@@ -29,7 +31,10 @@ class CollectData extends Component {
     listOfPatients: [],
     options: [],
     cidOptions: [],
-    dataFromIPFS: []
+    dataFromIPFS: [],
+    chartW: [],
+    chartBS: [],
+    chartSE: []
   }
 
   onLoadFile = async files => {
@@ -72,11 +77,44 @@ class CollectData extends Component {
 
     // define the header
     let head = [];
+    let chartW = [];
+    let chartBS = [];
+    let chartSE = [];
     for (let i = 0; i < this.state.nbObservation; i++) {
       head[i] = `Trial ${i + 1}`;
+
+      let objW = {};
+      let objBS = {};
+      let objSE = {};
+
+      objW.label = `Trial ${i + 1}`;
+      objW.y = this.state.numericalData[0][i + 1];
+      chartW.push(objW);
+
+      objBS.label = `Trial ${i + 1}`;
+      objBS.y = this.state.numericalData[1][i + 1];
+      chartBS.push(objBS);
+
+      objSE.label = `Trial ${i + 1}`;
+      objSE.y = this.state.numericalData[2][i + 1];
+      chartSE.push(objSE);
     }
 
+    this.setState({
+      chartW: chartW,
+      chartBS: chartBS,
+      chartSE: chartSE
+    })
+
     this.setState({ header: head });
+    console.log("Weight =", this.state.chartW);
+    console.log("Blood sugar =", this.state.chartBS);
+    console.log("Side effects =", this.state.chartSE);
+
+
+
+    console.log("HEADER =", this.state.header);
+    console.log("NUM DATA =", this.state.numericalData);
 
   }
 
@@ -166,7 +204,10 @@ class CollectData extends Component {
 
   onCIDButtonClick = async () => {
     let data = await FetchFromIPFS(this.state.cid, ENCRYPTION_KEY);
-    this.setState({ dataFromIPFS: JSON.parse(data).data })
+    this.setState({
+      msg2: 'ok',
+      dataFromIPFS: JSON.parse(data).data
+    })
 
     console.log('SELECTED CID =', this.state.cid);
     console.log('DATA FROM IPFS =', this.state.dataFromIPFS);
@@ -219,7 +260,7 @@ class CollectData extends Component {
               </Segment.Group>
 
               {
-                this.state.header.length !== 0
+                this.state.header.length !== 0 || this.state.chartW.length !== 0
                   ?
                   <div className='trial-tab'>
                     <Table celled definition>
@@ -305,6 +346,33 @@ class CollectData extends Component {
                   height="0"
                 />
               </div>
+              {
+                this.state.msg2 !== ''
+                  ?
+                  <div className="file-load">
+                    <ReactFileReader fileTypes={[".csv", ".xlsx", ".pdf", ".zip"]} base64={true} multipleFiles={true} handleFiles={this.onLoadFile}>
+                      <Button type="submit" color="brown">
+                        Upload the file
+                      </Button>
+                    </ReactFileReader>
+                  </div>
+                  :
+                  console.log('')
+              }
+
+              {
+                this.state.chartW.length !== 0
+                  ?
+                  <Chart
+                    title="Patient weight"
+                    yTitle="Weight"
+                    name="Observation"
+                    data={this.state.chartW}
+                  />
+                  :
+                  console.log('')
+              }
+
             </Grid.Column>
 
           </Grid.Row>
@@ -324,8 +392,6 @@ class CollectData extends Component {
             :
             console.log('')
         }
-
-
       </div>
     );
   }
