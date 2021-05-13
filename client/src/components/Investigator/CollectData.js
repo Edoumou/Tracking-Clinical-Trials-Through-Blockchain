@@ -2,11 +2,10 @@ import React, { Component } from "react";
 import { Header, Grid, Button, Icon, Segment, Table, Form, Select } from "semantic-ui-react";
 import ReactFileReader from 'react-file-reader';
 import { ExcelRenderer } from 'react-excel-renderer';
-import fileDownload from 'js-file-download';
 import EncryptData from "../utils/EncryptData";
 import SendToIPFS from "../utils/SendToIPFS";
 import FetchFromIPFS from "../utils/FetchFromIPFS";
-import Chart from '../charts/Chart';
+import ChartBar from '../charts/ChartBar';
 import "./styles/style.css";
 
 const iv = 16;
@@ -34,13 +33,68 @@ class CollectData extends Component {
     dataFromIPFS: [],
     chartW: [],
     chartBS: [],
-    chartSE: []
+    chartSE: [],
+    cidFilename: '',
+
   }
 
   onLoadFile = async files => {
     this.setState({
       base64: files.base64,
-      filename: files.fileList[0].name
+      filename: files.fileList[0].name,
+      cidFilename: ''
+    });
+
+    await ExcelRenderer(files.fileList[0], (err, res) => {
+      if (err) {
+        console.log("Error : ", err);
+      } else {
+        this.setState({
+          data: res.rows
+        });
+        this.setState({ msg: 'ok' });
+      }
+    });
+
+    this.setState({
+      nbObservation: this.state.data[8][1]
+    });
+
+    // create a array containing patient data to show on the page
+    let Tab = new Array(4);
+    for (let i = 0; i < 4; i++) {
+      Tab[i] = [];
+    }
+
+    for (let i = 3; i < 7; i++) {
+      for (let j = 0; j < this.state.nbObservation + 1; j++) {
+        Tab[i - 3][j] = this.state.data[i][j + 2];
+      }
+    }
+
+    this.setState({
+      ID: this.state.data[9][1],
+      numericalData: Tab
+    });
+
+    // define the header
+    let head = [];
+    for (let i = 0; i < this.state.nbObservation; i++) {
+      head[i] = `Trial ${i + 1}`;
+    }
+
+    this.setState({ header: head });
+
+    console.log("HEADER =", this.state.header);
+    console.log("NUM DATA =", this.state.numericalData);
+
+  }
+
+  onLoadCIDFile = async files => {
+    this.setState({
+      base64: files.base64,
+      cidFilename: files.fileList[0].name,
+      filename: ''
     });
 
     await ExcelRenderer(files.fileList[0], (err, res) => {
@@ -115,7 +169,6 @@ class CollectData extends Component {
 
     console.log("HEADER =", this.state.header);
     console.log("NUM DATA =", this.state.numericalData);
-
   }
 
   onButtonClick = async () => {
@@ -194,6 +247,8 @@ class CollectData extends Component {
 
         options.push(option);
       }
+
+      return true;
     })
 
     this.setState({ cidOptions: options });
@@ -219,7 +274,7 @@ class CollectData extends Component {
         <Grid divided relaxed textAlign="left">
           <Grid.Row>
 
-            <Grid.Column width={8}>
+            <Grid.Column width={9}>
               <Header as='h2' color='violet'>
                 Upload the file that contains new data
               </Header>
@@ -296,7 +351,7 @@ class CollectData extends Component {
 
             </Grid.Column>
 
-            <Grid.Column width={8}>
+            <Grid.Column width={7}>
               <Header as='h2' color='violet'>
                 Consult patient Data
               </Header>
@@ -344,31 +399,19 @@ class CollectData extends Component {
                   src={this.state.dataFromIPFS}
                   width="0"
                   height="0"
+                  title="data"
                 />
               </div>
               {
                 this.state.msg2 !== ''
                   ?
                   <div className="file-load">
-                    <ReactFileReader fileTypes={[".csv", ".xlsx", ".pdf", ".zip"]} base64={true} multipleFiles={true} handleFiles={this.onLoadFile}>
+                    <ReactFileReader fileTypes={[".csv", ".xlsx", ".pdf", ".zip"]} base64={true} multipleFiles={true} handleFiles={this.onLoadCIDFile}>
                       <Button type="submit" color="brown">
                         Upload the file
                       </Button>
                     </ReactFileReader>
                   </div>
-                  :
-                  console.log('')
-              }
-
-              {
-                this.state.chartW.length !== 0
-                  ?
-                  <Chart
-                    title="Patient weight"
-                    yTitle="Weight"
-                    name="Observation"
-                    data={this.state.chartW}
-                  />
                   :
                   console.log('')
               }
@@ -379,6 +422,51 @@ class CollectData extends Component {
         </Grid>
 
         {
+          this.state.chartW.length !== 0
+            ?
+            <div className='patient-chart'>
+              <div className='chart-header'>
+                <Header as='h2' color='red'>
+                  Charts for Weight, Blood sugar and Side effects
+                </Header>
+              </div>
+
+              <Grid columns='three' divided>
+                <Grid.Row>
+                  <Grid.Column>
+                    <ChartBar
+                      title="Weight"
+                      yTitle="Weight"
+                      name="Observation"
+                      data={this.state.chartW}
+                    />
+                  </Grid.Column>
+                  <Grid.Column>
+                    <ChartBar
+                      title="Blood sugar"
+                      yTitle="BS"
+                      name="Observation"
+                      data={this.state.chartBS}
+                    />
+                  </Grid.Column>
+                  <Grid.Column>
+                    <ChartBar
+                      title="Side effects"
+                      yTitle="SE"
+                      name="Observation"
+                      data={this.state.chartSE}
+                    />
+                  </Grid.Column>
+                </Grid.Row>
+              </Grid>
+            </div>
+
+            :
+            console.log('')
+        }
+
+
+        {
           this.state.showfile
             ?
             <div className='patient-data-file'>
@@ -387,6 +475,7 @@ class CollectData extends Component {
                 src={this.state.base64}
                 width="0"
                 height="0"
+                title="data"
               />
             </div>
             :

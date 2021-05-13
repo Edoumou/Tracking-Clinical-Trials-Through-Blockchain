@@ -93,3 +93,12 @@
 .patient-data-file {
   display: none;
 }
+
+.patient-chart {
+  margin-top: 100px;
+}
+
+.chart-header {
+  margin-bottom: 40px;
+  text-decoration: underline;
+}

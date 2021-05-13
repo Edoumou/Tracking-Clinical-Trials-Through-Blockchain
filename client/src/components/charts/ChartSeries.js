@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
-import CanvasJSReact from '../../../src/canvasjs.react';
+import CanvasJSReact from '../../canvasjs.react';
 
 const CanvasJSChart = CanvasJSReact.CanvasJSChart;
 
-class Chart extends Component {
+class ChartSeries extends Component {
     render() {
         const options = {
             animationEnabled: true,
@@ -31,4 +31,4 @@ class Chart extends Component {
     }
 }
 
-export default Chart
+export default ChartSeries
