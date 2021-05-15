@@ -9,6 +9,7 @@ import AuthorityAdmin from "./components/Authority/AuthorityAdmin";
 import PromoterAdmin from "./components/Promoter/PromoterAdmin";
 import Promoter from "./components/Promoter/Promoter";
 import Investigator from "./components/Investigator/Investigator";
+import Patient from "./components/Patient";
 
 class App extends Component {
   state = {
@@ -131,6 +132,17 @@ class App extends Component {
           <Investigator contract={contract} role={role} account={account} />
         </div>
       );
+    } else if (role === "PATIENT") {
+      return (
+        <div className="App ui container">
+          <Patient
+            contract={contract}
+            role={role}
+            account={account}
+          />
+        </div>
+
+      )
     } else {
       return (
         <div className="App ui container">

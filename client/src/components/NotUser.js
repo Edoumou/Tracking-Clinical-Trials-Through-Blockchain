@@ -12,23 +12,23 @@ class NotUser extends Component {
 
         <div className="header-img-notuser">
           <Card fluid>
-              <div className="header-img">
-                  <Image
-                      src={headerImage}
-                      size="large"
-                  />
-              </div> 
-          </Card>           
+            <div className="header-img">
+              <Image
+                src={headerImage}
+                size="large"
+              />
+            </div>
+          </Card>
         </div>
 
         <div className="metamask-connect">
-          <div className="ui warning message">       
+          <div className="ui warning message">
             <div className="header">
               <h1>Connect to your metamask account first</h1>
             </div>
             <br></br>
             <strong>Use the account you registered with when you got enrolled.</strong>
-          </div> 
+          </div>
         </div>
       </div>
     );

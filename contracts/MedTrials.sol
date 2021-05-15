@@ -371,12 +371,8 @@ contract MedTrials is AccessControl {
         returns (string[] memory)
     {
         require(
-            hasRole(INVESTIGATOR, msg.sender),
-            "Only investigators can collect data"
-        );
-        require(
-            msg.sender == patients[_patientID].investigator,
-            "You do not have right for this patient"
+            hasRole(INVESTIGATOR, msg.sender) || hasRole(PATIENT, msg.sender),
+            "Only investigators or patient can collect or read data"
         );
 
         return patients[_patientID].cids;
