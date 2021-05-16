@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
-import { Header, Card, Image, Segment, Grid } from 'semantic-ui-react';
+import { Header, Card, Icon, Image, Segment, Grid } from 'semantic-ui-react';
 import headerImage from '../images/header2.jpeg';
 import FetchFromIPFS from "./utils/FetchFromIPFS";
 import '../App.css';
 
-const iv = 16;
 const ENCRYPTION_KEY = 'fpbyr4386v8hpxdruppijkt3v6wayxmi';
 
 class Patient extends Component {
@@ -12,6 +11,7 @@ class Patient extends Component {
         ID: '',
         protocol: '',
         fullName: '',
+        gender: '',
         cid: '',
         data: {}
     }
@@ -37,19 +37,20 @@ class Patient extends Component {
                 let index = cids.length - 1;
                 this.setState({ cid: cids[index] });
 
-                const encodedData = await FetchFromIPFS(this.state.cid, ENCRYPTION_KEY)
+                const encodedData = JSON.parse(await FetchFromIPFS(this.state.cid, ENCRYPTION_KEY));
 
-                console.log("cid =", encodedData);
+                //console.log("dATA =", encodedData.data[0]);
 
                 let data = JSON.parse(await FetchFromIPFS(cid, ENCRYPTION_KEY));
 
                 this.setState({
                     ID: data.id,
+                    gender: data.gender,
                     protocol: data.protocol,
                     fullName: data.fullName
                 });
 
-                console.log("DATA =", this.state.ID, this.state.fullName, this.state.protocol);
+                console.log("DATA =", this.state.ID, this.state.gender, this.state.fullName, this.state.protocol);
             }
 
         }
@@ -79,7 +80,37 @@ class Patient extends Component {
                     <Grid columns={2} divided textAlign="left">
                         <Grid.Row stretched>
                             <Grid.Column width={6}>
-                                <Header as='h2'>Patient Infos</Header>
+                                {
+                                    this.state.gender !== ''
+                                        ?
+                                        this.state.gender === 'M'
+                                            ?
+                                            <Card>
+                                                <Image src='https://react.semantic-ui.com/images/avatar/large/steve.jpg' wrapped ui={false} />
+                                                <Card.Content>
+                                                    <Card.Header>{this.state.fullName}</Card.Header>
+                                                    <Card.Meta>ID: {this.state.ID}</Card.Meta>
+                                                    <Card.Description>
+                                                        Gender: <strong>{this.state.gender}</strong> <br></br>
+                                                        Protocol ID: <strong>{this.state.protocol}</strong> <br></br>
+                                                        <hr></hr>
+                                                        Hi <strong>{this.state.fullName}</strong>! Your are enrolled in the cinical trials
+                                                        with the protocol ID <strong>{this.state.protocol}</strong>. <br></br>
+
+                                                    </Card.Description>
+                                                </Card.Content>
+                                            </Card>
+                                            :
+                                            <Card>
+                                                <Image sec='https://react.semantic-ui.com/images/avatar/large/molly.png' wrapped ui={false} />
+                                                header={this.state.fullName}
+                                                extra={
+                                                    <h4>Hello</h4>
+                                                }
+                                            </Card>
+                                        :
+                                        console.log('')
+                                }
                             </Grid.Column>
                             <Grid.Column width={10}>
                                 <Header as="h2">We are here</Header>
