@@ -234,12 +234,6 @@ contract MedTrials is AccessControl {
         view
         returns (string memory)
     {
-        require(
-            protocols[_id].promoter == msg.sender ||
-                protocols[_id].investigator == msg.sender,
-            "You do not have right to open this project"
-        );
-
         return protocols[_id].cid;
     }
 
@@ -270,16 +264,8 @@ contract MedTrials is AccessControl {
         address _patientAddress
     ) public {
         require(
-            hasRole(INVESTIGATOR, msg.sender),
-            "Only investigators can add patients to protocols"
-        );
-        require(
             protocols[_protocolID].authorized == true,
             "This protocol has not been authorized yet"
-        );
-        require(
-            msg.sender == protocols[_protocolID].investigator,
-            "You do not have right to add patients to this protocol"
         );
         require(
             _patientAddress != patients[_patientID].patient,
@@ -305,17 +291,9 @@ contract MedTrials is AccessControl {
     }
 
     function revokeConsent(string memory _patientID) public {
-        require(
-            msg.sender == patients[_patientID].patient,
-            "Your ID is not correct"
-        );
-        require(
-            patients[_patientID].consent == true,
-            "You already revoke your consent"
-        );
-
         patients[_patientID].consent == false;
         delete patients[_patientID];
+        renounceRole(PATIENT, msg.sender);
 
         emit consentRevoked(_patientID);
     }
@@ -338,7 +316,6 @@ contract MedTrials is AccessControl {
             hasRole(AUTHORITY, msg.sender),
             "Only authorities can suspend trials"
         );
-        require(!protocols[_protocolID].authorized);
 
         protocols[_protocolID].authorized = true;
         protocols[_protocolID].status = "resumed";
@@ -347,19 +324,6 @@ contract MedTrials is AccessControl {
     }
 
     function storeDataCID(string memory _patientID, string memory _cid) public {
-        require(
-            hasRole(INVESTIGATOR, msg.sender),
-            "Only investigators can collect data"
-        );
-        require(
-            msg.sender == patients[_patientID].investigator,
-            "You do not have right for this patient"
-        );
-        require(
-            patients[_patientID].consent == true,
-            "Get the patient consent first"
-        );
-
         patients[_patientID].cids.push(_cid);
 
         emit cidSaved(_cid);

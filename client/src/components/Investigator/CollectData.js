@@ -172,9 +172,6 @@ class CollectData extends Component {
   }
 
   onButtonClick = async () => {
-    console.log("DATA = ", this.state.data);
-    console.log("BASE64 =", this.state.base64);
-
     const obj = {
       data: this.state.base64
     }
@@ -184,10 +181,6 @@ class CollectData extends Component {
 
     const receipt = await this.props.contract.methods.storeDataCID(this.state.ID, cid)
       .send({ from: this.props.account });
-
-    console.log("ID =", this.state.ID)
-    console.log("CID =", cid);
-    console.log("RECEIPT =", receipt);
 
     this.setState({
       filename: '',
@@ -221,8 +214,6 @@ class CollectData extends Component {
     }
 
     await this.setState({ options: options });
-
-    console.log("Patient =", this.state.patient);
   }
 
   componentDidMount = async () => {
