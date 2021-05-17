@@ -295,11 +295,10 @@ contract MedTrials is AccessControl {
         string memory _protocolID,
         address _address
     ) public {
-        nbOfPatients--;
         protocols[_protocolID].nbOfPatients--;
         patients[_patientID].consent = false;
+        patients[_patientID].investigator = address(0);
         roles[_address] = "";
-        delete patients[_patientID];
 
         emit consentRevoked(_patientID);
     }
