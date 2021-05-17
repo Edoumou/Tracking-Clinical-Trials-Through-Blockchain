@@ -102,3 +102,9 @@
   margin-bottom: 40px;
   text-decoration: underline;
 }
+
+.revoke-consent {
+  width: 60%;
+  margin-left: 20%;
+  margin-top: 60px;
+}

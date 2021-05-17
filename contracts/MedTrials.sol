@@ -290,10 +290,16 @@ contract MedTrials is AccessControl {
         emit patientAdded(_patientID, _protocolID);
     }
 
-    function revokeConsent(string memory _patientID) public {
-        patients[_patientID].consent == false;
+    function revokeConsent(
+        string memory _patientID,
+        string memory _protocolID,
+        address _address
+    ) public {
+        nbOfPatients--;
+        protocols[_protocolID].nbOfPatients--;
+        patients[_patientID].consent = false;
+        roles[_address] = "";
         delete patients[_patientID];
-        renounceRole(PATIENT, msg.sender);
 
         emit consentRevoked(_patientID);
     }

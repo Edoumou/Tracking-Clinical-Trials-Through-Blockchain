@@ -7,6 +7,7 @@ import "./styles/style.css";
 import Home from "./Home";
 import AddPatient from "./AddPatient";
 import CollectData from "./CollectData";
+import RevokeConsent from "./RevokeConsent";
 
 class Header extends Component {
   render() {
@@ -46,6 +47,11 @@ class Header extends Component {
                   Collect patient Data
                 </Button>
               </Menu.Item>
+              <Menu.Item style={{ fontSize: 12 }}>
+                <Button color="orange" as={Link} to="/investigator/revoke-consent">
+                  Revoke patient consent
+                </Button>
+              </Menu.Item>
             </Menu>
 
             <Switch>
@@ -60,6 +66,12 @@ class Header extends Component {
               </Route>
               <Route path="/investigator/add-data">
                 <CollectData
+                  contract={this.props.contract}
+                  account={this.props.account}
+                />
+              </Route>
+              <Route path="/investigator/revoke-consent">
+                <RevokeConsent
                   contract={this.props.contract}
                   account={this.props.account}
                 />

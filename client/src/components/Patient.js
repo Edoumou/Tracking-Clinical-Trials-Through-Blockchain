@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Header, Card, Icon, Image, Segment, Grid } from 'semantic-ui-react';
+import { Header, Card, Image, Segment, Grid, Button, Message } from 'semantic-ui-react';
 import headerImage from '../images/header2.jpeg';
 import FetchFromIPFS from "./utils/FetchFromIPFS";
 import '../App.css';
@@ -12,6 +12,7 @@ class Patient extends Component {
         protocol: '',
         fullName: '',
         gender: '',
+        investigator: '',
         cid: '',
         data: {}
     }
@@ -35,9 +36,12 @@ class Patient extends Component {
                 cid = cids[0];
 
                 let index = cids.length - 1;
-                this.setState({ cid: cids[index] });
+                this.setState({
+                    cid: cids[index],
+                    investigator: patient.investigator
+                });
 
-                const encodedData = JSON.parse(await FetchFromIPFS(this.state.cid, ENCRYPTION_KEY));
+                //const encodedData = JSON.parse(await FetchFromIPFS(this.state.cid, ENCRYPTION_KEY));
 
                 //console.log("dATA =", encodedData.data[0]);
 
@@ -54,6 +58,11 @@ class Patient extends Component {
             }
 
         }
+    }
+
+    onButtonClick = async () => {
+        await this.props.contract.methods.revokeConsent(this.state.ID)
+            .send({ from: this.props.account });
     }
 
     componentDidMount = async () => {
@@ -77,9 +86,9 @@ class Patient extends Component {
                 </div>
 
                 <div className="patient-grid">
-                    <Grid columns={2} divided textAlign="left">
+                    <Grid columns={2} divided>
                         <Grid.Row stretched>
-                            <Grid.Column width={6}>
+                            <Grid.Column width={6} textAlign="left">
                                 {
                                     this.state.gender !== ''
                                         ?
@@ -96,24 +105,38 @@ class Patient extends Component {
                                                         <hr></hr>
                                                         Hi <strong>{this.state.fullName}</strong>! Your are enrolled in the cinical trials
                                                         with the protocol ID <strong>{this.state.protocol}</strong>. <br></br>
+                                                        Your investigator address is:
+                                                        <br></br>
+                                                        {this.state.investigator}
 
                                                     </Card.Description>
                                                 </Card.Content>
                                             </Card>
                                             :
                                             <Card>
-                                                <Image sec='https://react.semantic-ui.com/images/avatar/large/molly.png' wrapped ui={false} />
-                                                header={this.state.fullName}
-                                                extra={
-                                                    <h4>Hello</h4>
-                                                }
+                                                <Image src='https://react.semantic-ui.com/images/avatar/large/molly.png' wrapped ui={false} />
+                                                <Card.Content>
+                                                    <Card.Header>{this.state.fullName}</Card.Header>
+                                                    <Card.Meta>ID: {this.state.ID}</Card.Meta>
+                                                    <Card.Description>
+                                                        Gender: <strong>{this.state.gender}</strong> <br></br>
+                                                        Protocol ID: <strong>{this.state.protocol}</strong> <br></br>
+                                                        <hr></hr>
+                                                        Hi <strong>{this.state.fullName}</strong>! Your are enrolled in the cinical trials
+                                                        with the protocol ID <strong>{this.state.protocol}</strong>. <br></br>
+                                                        Your investigator address is:
+                                                        <br></br>
+                                                        {this.state.investigator}
+
+                                                    </Card.Description>
+                                                </Card.Content>
                                             </Card>
                                         :
                                         console.log('')
                                 }
                             </Grid.Column>
                             <Grid.Column width={10}>
-                                <Header as="h2">We are here</Header>
+
                             </Grid.Column>
                         </Grid.Row>
                     </Grid>

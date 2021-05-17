@@ -73,7 +73,7 @@ class CollectData extends Component {
     }
 
     this.setState({
-      ID: this.state.data[9][1],
+      ID: this.state.data[10][1],
       numericalData: Tab
     });
 
@@ -125,7 +125,7 @@ class CollectData extends Component {
     }
 
     this.setState({
-      ID: this.state.data[9][1],
+      ID: this.state.data[10][1],
       numericalData: Tab
     });
 
@@ -172,15 +172,22 @@ class CollectData extends Component {
   }
 
   onButtonClick = async () => {
+    console.log("DATA = ", this.state.data);
+    console.log("BASE64 =", this.state.base64);
+
     const obj = {
       data: this.state.base64
     }
 
     const encryptedData = EncryptData(JSON.stringify(obj), iv, ENCRYPTION_KEY);
     const cid = await SendToIPFS(encryptedData);
-
+    console.log("ID HERE =", this.state.ID);
     const receipt = await this.props.contract.methods.storeDataCID(this.state.ID, cid)
       .send({ from: this.props.account });
+
+    console.log("ID =", this.state.ID)
+    console.log("CID =", cid);
+    console.log("RECEIPT =", receipt);
 
     this.setState({
       filename: '',
@@ -214,6 +221,8 @@ class CollectData extends Component {
     }
 
     await this.setState({ options: options });
+
+    console.log("Patient =", this.state.patient);
   }
 
   componentDidMount = async () => {
@@ -227,7 +236,7 @@ class CollectData extends Component {
     let Tab = [];
     Tab = await this.props.contract.methods.getDataCID(this.state.patient)
       .call({ from: this.props.account });
-
+    console.log("TAB =", Tab);
     const options = [];
     Tab.map((res, index, arr) => {
       if (index !== 0) {
@@ -353,7 +362,7 @@ class CollectData extends Component {
                     <Form.Field
                       control={Select}
                       name='patient'
-                      label='Patient ID'
+                      label='Select patient ID'
                       required
                       options={this.state.options}
                       onChange={(e, data) => this.setState({ patient: data.value })}
@@ -369,7 +378,7 @@ class CollectData extends Component {
                         <Form.Field
                           control={Select}
                           name='cid'
-                          label='Trial number'
+                          label='Observation number'
                           required
                           options={this.state.cidOptions}
                           onChange={(e, data) => this.setState({ cid: data.value })}
