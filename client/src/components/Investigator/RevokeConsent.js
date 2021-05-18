@@ -1,9 +1,6 @@
 import React, { Component } from 'react';
-import FetchFromIPFS from '../utils/FetchFromIPFS';
-import { Grid, Table, Header, Form, Button, Radio, Select, Icon } from "semantic-ui-react";
+import { Table, Header, Button } from "semantic-ui-react";
 import './styles/style.css'
-
-const ENCRYPTION_KEY = 'fpbyr4386v8hpxdruppijkt3v6wayxmi';
 
 class RevokeConsent extends Component {
     state = {
@@ -66,7 +63,7 @@ class RevokeConsent extends Component {
         return (
             <div className='revoke-consent'>
                 <Header as="h2" color="brown">
-                    Revoke consent
+                    Revoke patient consent
                 </Header>
 
                 {

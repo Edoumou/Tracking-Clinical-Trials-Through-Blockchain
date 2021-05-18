@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Header, Card, Image, Segment, Grid, Button, Message } from 'semantic-ui-react';
+import { Card, Image, Segment, Grid } from 'semantic-ui-react';
 import headerImage from '../images/header2.jpeg';
 import FetchFromIPFS from "./utils/FetchFromIPFS";
 import '../App.css';

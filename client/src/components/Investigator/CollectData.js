@@ -27,6 +27,7 @@ class CollectData extends Component {
     nbOfPatients: 0,
     patient: '',
     cid: '',
+    SSE: 0,
     listOfPatients: [],
     options: [],
     cidOptions: [],
@@ -87,6 +88,10 @@ class CollectData extends Component {
 
     console.log("HEADER =", this.state.header);
     console.log("NUM DATA =", this.state.numericalData);
+
+
+    this.setState({ SSE: this.state.numericalData[3][this.state.nbObservation] });
+    console.log("SSE =", this.state.SSE);
 
   }
 
@@ -182,7 +187,7 @@ class CollectData extends Component {
     const encryptedData = EncryptData(JSON.stringify(obj), iv, ENCRYPTION_KEY);
     const cid = await SendToIPFS(encryptedData);
     console.log("ID HERE =", this.state.ID);
-    const receipt = await this.props.contract.methods.storeDataCID(this.state.ID, cid)
+    const receipt = await this.props.contract.methods.storeDataCID(this.state.ID, cid, this.state.SSE)
       .send({ from: this.props.account });
 
     console.log("ID =", this.state.ID)

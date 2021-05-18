@@ -11,6 +11,7 @@ contract MedTrials is AccessControl {
         address investigator;
         bool registered;
         bool authorized;
+        bool alert;
         uint256 nbOfPatients;
         uint256 index;
     }
@@ -267,6 +268,7 @@ contract MedTrials is AccessControl {
             protocols[_protocolID].authorized == true,
             "This protocol has not been authorized yet"
         );
+        require(protocols[_protocolID].alert == false, "There is an alert");
         require(
             _patientAddress != patients[_patientID].patient,
             "This patient already exist"
@@ -308,8 +310,12 @@ contract MedTrials is AccessControl {
             hasRole(AUTHORITY, msg.sender),
             "Only authoriities can suspend trials"
         );
-        require(protocols[_protocolID].authorized);
+        require(
+            protocols[_protocolID].authorized,
+            "Protocol not authorized yet"
+        );
 
+        protocols[_protocolID].alert = true;
         protocols[_protocolID].authorized = false;
         protocols[_protocolID].status = "suspended";
 
@@ -322,14 +328,27 @@ contract MedTrials is AccessControl {
             "Only authorities can suspend trials"
         );
 
+        protocols[_protocolID].alert = false;
         protocols[_protocolID].authorized = true;
         protocols[_protocolID].status = "resumed";
 
         emit protocolResumed(_protocolID);
     }
 
-    function storeDataCID(string memory _patientID, string memory _cid) public {
+    function storeDataCID(
+        string memory _patientID,
+        string memory _cid,
+        uint256 _alert
+    ) public {
         patients[_patientID].cids.push(_cid);
+
+        if (_alert == 1) {
+            string memory protocolID = patients[_patientID].protocolID;
+
+            protocols[protocolID].alert = true;
+            protocols[protocolID].authorized = false;
+            protocols[protocolID].status = "suspended";
+        }
 
         emit cidSaved(_cid);
     }

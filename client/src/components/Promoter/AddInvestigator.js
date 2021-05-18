@@ -8,155 +8,155 @@ const iv = 16;
 const ENCRYPTION_KEY = "fpbyr4386v8hpxdruppijkt3v6wayxmi";
 
 class AddInvestigator extends Component {
-  state = {
-    fullName: "",
-    address: "",
-    company: "",
-    nbOfInvestigators: 0,
-    investigators: [],
-  };
-
-  onFormSubmit = async () => {
-    console.log("NAME =", this.state.fullName);
-    console.log("COMPANY =", this.state.company);
-    console.log("address =", this.state.address);
-
-    const obj = {
-      fullName: this.state.fullName,
-      company: this.state.company,
-      address: this.state.address,
-      description: `${this.state.fullName} is a full investigator at ${this.state.company}. To know more...`,
+    state = {
+        fullName: "",
+        address: "",
+        company: "",
+        nbOfInvestigators: 0,
+        investigators: [],
     };
 
-    // store encrypted data to ipfs
-    const encryptedData = EncryptData(JSON.stringify(obj), iv, ENCRYPTION_KEY);
-    const cid = await SendToIPFS(encryptedData);
+    onFormSubmit = async () => {
+        console.log("NAME =", this.state.fullName);
+        console.log("COMPANY =", this.state.company);
+        console.log("address =", this.state.address);
 
-    // store the investigator address and the data cid to ethereum
-    await this.props.contract.methods
-      .addInvestigator(this.state.address, cid)
-      .send({ from: this.props.account });
+        const obj = {
+            fullName: this.state.fullName,
+            company: this.state.company,
+            address: this.state.address,
+            description: `${this.state.fullName} is a full investigator at ${this.state.company}. To know more...`,
+        };
 
-    //let addr = receipt.events.promoterAdded.returnValues[0];
-    this.setState({
-      address: "",
-      fullName: "",
-      company: "",
-    });
+        // store encrypted data to ipfs
+        const encryptedData = EncryptData(JSON.stringify(obj), iv, ENCRYPTION_KEY);
+        const cid = await SendToIPFS(encryptedData);
 
-    this.getInvestigators();
-  };
+        // store the investigator address and the data cid to ethereum
+        await this.props.contract.methods
+            .addInvestigator(this.state.address, cid)
+            .send({ from: this.props.account });
 
-  componentDidMount = async () => {
-    await this.getInvestigators();
-  };
+        //let addr = receipt.events.promoterAdded.returnValues[0];
+        this.setState({
+            address: "",
+            fullName: "",
+            company: "",
+        });
 
-  getInvestigators = async () => {
-    const nb = await this.props.contract.methods
-      .nbOfInvestigators()
-      .call({ from: this.props.account });
-    this.setState({ nbOfInvestigators: nb });
+        await this.getInvestigators();
+    };
 
-    let investigatorTab = [];
-    for (let i = 0; i < nb; i++) {
-      const investigator = await this.props.contract.methods
-        .investigators(i)
-        .call({ from: this.props.account });
+    componentDidMount = async () => {
+        await this.getInvestigators();
+    };
 
-      let encodedData = await FetchFromIPFS(investigator.cid, ENCRYPTION_KEY);
-      let data = JSON.parse(encodedData);
+    getInvestigators = async () => {
+        const nb = await this.props.contract.methods
+            .nbOfInvestigators()
+            .call({ from: this.props.account });
+        this.setState({ nbOfInvestigators: nb });
 
-      if (investigator["promoter"] === this.props.account) {
-        investigatorTab.push(data);
-      }
-    }
+        let investigatorTab = [];
+        for (let i = 0; i < nb; i++) {
+            const investigator = await this.props.contract.methods
+                .investigators(i)
+                .call({ from: this.props.account });
 
-    this.setState({ investigators: investigatorTab });
-  };
+            let encodedData = await FetchFromIPFS(investigator.cid, ENCRYPTION_KEY);
+            let data = JSON.parse(encodedData);
 
-  render() {
-    const { address, fullName, company } = this.state;
-    const nb = this.state.nbOfInvestigators;
-    let Tab = [];
-    Tab = this.state.investigators;
+            if (investigator["promoter"] === this.props.account) {
+                investigatorTab.push(data);
+            }
+        }
 
-    return (
-      <div>
-        <div className="admin-h1">
-          <h1>Add an investigator</h1>
-        </div>
+        this.setState({ investigators: investigatorTab });
+    };
 
-        <div className="admin-form">
-          <Form size="large" onSubmit={this.onFormSubmit}>
-            <Form.Group>
-              <Form.Field
-                label="Name"
-                name="fullName"
-                value={fullName}
-                placeholder="Full Name"
-                control="input"
-                width="7"
-                required
-                onChange={(e) => this.setState({ fullName: e.target.value })}
-              />
-              <Form.Field
-                label="Company"
-                name="company"
-                value={company}
-                placeholder="Company"
-                control="input"
-                width="7"
-                required
-                onChange={(e) => this.setState({ company: e.target.value })}
-              />
-              <Form.Field
-                label="Investigator address"
-                name="address"
-                value={address}
-                placeholder="Investigator Address"
-                control="input"
-                width="10"
-                required
-                onChange={(e) => this.setState({ address: e.target.value })}
-              />
-              <Button primary>Submit</Button>
-            </Form.Group>
-          </Form>
-        </div>
+    render() {
+        const { address, fullName, company } = this.state;
+        const nb = this.state.nbOfInvestigators;
+        let Tab = [];
+        Tab = this.state.investigators;
 
-        <div className="admin-grid">
-          {{ nb } !== 0 ? (
-            <Grid columns={3} divided>
-              {Tab.map((res, index, arr) => (
-                <div className="admin-card" key={index}>
-                  <Card>
-                    <Card.Content textAlign="left">
-                      <Image
-                        floated="right"
-                        size="mini"
-                        src="https://react.semantic-ui.com/images/avatar/large/steve.jpg"
-                      />
-                      <Card.Header>{Tab[index].fullName}</Card.Header>
-                      <Card.Meta>Promoter at {Tab[index].company}</Card.Meta>
-                      <Card.Description>
-                        {Tab[index].description}.<br></br>
-                        <br></br>
-                        Address:{" "}
-                        <strong>{Tab[index].address.substr(0, 10)}</strong>...
-                        <hr></hr>
-                      </Card.Description>
-                    </Card.Content>
-                  </Card>
+        return (
+            <div>
+                <div className="admin-h1">
+                    <h1>Add an investigator</h1>
                 </div>
-              ))}
-            </Grid>
-          ) : (
-            console.log("")
-          )}
-        </div>
-      </div>
-    );
-  }
+
+                <div className="admin-form">
+                    <Form size="large" onSubmit={this.onFormSubmit}>
+                        <Form.Group>
+                            <Form.Field
+                                label="Name"
+                                name="fullName"
+                                value={fullName}
+                                placeholder="Full Name"
+                                control="input"
+                                width="7"
+                                required
+                                onChange={(e) => this.setState({ fullName: e.target.value })}
+                            />
+                            <Form.Field
+                                label="Company"
+                                name="company"
+                                value={company}
+                                placeholder="Company"
+                                control="input"
+                                width="7"
+                                required
+                                onChange={(e) => this.setState({ company: e.target.value })}
+                            />
+                            <Form.Field
+                                label="Investigator address"
+                                name="address"
+                                value={address}
+                                placeholder="Investigator Address"
+                                control="input"
+                                width="10"
+                                required
+                                onChange={(e) => this.setState({ address: e.target.value })}
+                            />
+                            <Button primary>Submit</Button>
+                        </Form.Group>
+                    </Form>
+                </div>
+
+                <div className="admin-grid">
+                    {{ nb } !== 0 ? (
+                        <Grid columns={3} divided>
+                            {Tab.map((res, index, arr) => (
+                                <div className="admin-card" key={index}>
+                                    <Card>
+                                        <Card.Content textAlign="left">
+                                            <Image
+                                                floated="right"
+                                                size="mini"
+                                                src="https://react.semantic-ui.com/images/avatar/large/steve.jpg"
+                                            />
+                                            <Card.Header>{Tab[index].fullName}</Card.Header>
+                                            <Card.Meta>Promoter at {Tab[index].company}</Card.Meta>
+                                            <Card.Description>
+                                                {Tab[index].description}.<br></br>
+                                                <br></br>
+                        Address:{" "}
+                                                <strong>{Tab[index].address.substr(0, 10)}</strong>...
+                        <hr></hr>
+                                            </Card.Description>
+                                        </Card.Content>
+                                    </Card>
+                                </div>
+                            ))}
+                        </Grid>
+                    ) : (
+                        console.log("")
+                    )}
+                </div>
+            </div>
+        );
+    }
 }
 
 export default AddInvestigator;
