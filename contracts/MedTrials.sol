@@ -246,6 +246,7 @@ contract MedTrials is AccessControl {
 
         protocols[_id].authorized = true;
         protocols[_id].status = "validated";
+        protocols[_id].alert == false;
 
         emit protocolValidated(_id);
     }
