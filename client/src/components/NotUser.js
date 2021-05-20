@@ -28,10 +28,11 @@ class NotUser extends Component {
             </div>
             <br></br>
             <strong>
-              Use the account you registered with when you got enrolled. To interact with the dapp
-              follow the instructions on my Github page here
+              Use the account you registered with when you got enrolled.
+              <br></br>
+              To interact with the dapp follow the instructions on my Github page here
               [
-                <a href="https://github.com/Edoumou/Tracking-Clinical-Trials-Through-Blockchain/blob/main/README.md">
+                <a href="https://github.com/Edoumou/Tracking-Clinical-Trials-Through-Blockchain/blob/main/README.md" target="_blank" rel="noreferrer">
                 Github
                 </a>
               ]
