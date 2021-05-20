@@ -2,8 +2,10 @@
 
 To interact with the Dapp connect to metamask with the following address => private key.
 
---mnemonic--: lobster ethics tiger ribbon evidence file crawl bright verify decrease drive senior
--password-: Medtrials
+mnemonic: lobster ethics tiger ribbon evidence file crawl bright verify decrease drive senior
+
+password: Medtrials
+
 Network: rinkeby
 
 - For authority page:
