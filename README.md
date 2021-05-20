@@ -2,13 +2,17 @@
 
 The Dapp has been deployed to heroku to the address: [[medtrials]](https://samuel-medical-trials.herokuapp.com/), you can use the ethereum addresses bellow to navigate through pages with correct address for access. For that, you need to connect to metamask with theses addresses either by importing them (the corresponding private keys have been provided) or by using the mnemonic with the password.
 
-To interact with the Dapp connect to metamask with the following address => private key.
+To interact with the Dapp connect to metamask with the following address => private key or mnemonic with password.
+
+__NB__: You must connect with __rinkeby__ as network
+
+# With mnemonic and password
 
 __mnemonic__: lobster ethics tiger ribbon evidence file crawl bright verify decrease drive senior
 
 __password__: Medtrials
 
-__Network__: rinkeby
+# For addresses and their corresponding private keys
 
 - For __AUTHORITY__ page:
 0x1328A06e124dc82eE28F0116826400e2E00079dc => 83af59fb748392a7ed7358a75fa8a353c23f7c9b4d3063615c24f7be2d11b133
