@@ -4,7 +4,7 @@ The Dapp has been deployed to heroku to the address: [[medtrials]](https://samue
 
 To interact with the Dapp connect to metamask with the following address => private key or mnemonic with password.
 
-__NB__: You must connect with __rinkeby__ as network (this is a tesnet), these addresses have been filled with some eth necessary for transactions.
+__NB__: You must connect with __rinkeby__ as network (this is a tesnet), these addresses have been provided with some eth necessary for transactions.
 
 # With mnemonic and password
 
