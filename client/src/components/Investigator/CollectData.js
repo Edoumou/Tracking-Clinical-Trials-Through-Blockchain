@@ -189,7 +189,6 @@ class CollectData extends Component {
     console.log("ID HERE =", this.state.ID);
     const receipt = await this.props.contract.methods.storeDataCID(this.state.ID, cid, this.state.SSE)
       .send({ from: this.props.account });
-
     console.log("ID =", this.state.ID)
     console.log("CID =", cid);
     console.log("RECEIPT =", receipt);

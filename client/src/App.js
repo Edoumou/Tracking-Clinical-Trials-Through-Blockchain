@@ -11,6 +11,7 @@ import Promoter from "./components/Promoter/Promoter";
 import Investigator from "./components/Investigator/Investigator";
 import Patient from "./components/Patient";
 
+
 class App extends Component {
   state = {
     storageValue: 0,

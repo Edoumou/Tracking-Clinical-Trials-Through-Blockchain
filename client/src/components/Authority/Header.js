@@ -46,44 +46,44 @@ class Header extends Component {
                     <Card.Content>
                         <BrowserRouter>
                             <Menu secondary fluid>
-                                <Menu.Item style={{fontSize: 12}}>
+                                <Menu.Item style={{ fontSize: 12 }}>
                                     <Button color='orange' as={Link} to="/authority/home">
                                         Home
                                     </Button>
                                 </Menu.Item>
-                                <Menu.Item style={{fontSize: 12}}>
+                                <Menu.Item style={{ fontSize: 12 }}>
                                     <Button color='orange' as={Link} to="/authority/validate-protocol">
                                         Validate protocols
                                     </Button>
                                 </Menu.Item>
-                                <Menu.Item style={{fontSize: 12}}>
+                                <Menu.Item style={{ fontSize: 12 }}>
                                     <Button color='orange' as={Link} to="/authority/suspend-resume-trials">
                                         Suspend or resume trials
                                     </Button>
-                                </Menu.Item>                                                                
+                                </Menu.Item>
                             </Menu>
 
                             <Switch>
                                 <Route path="/authority/home">
                                     <Home />
-                                </Route>                     
+                                </Route>
                                 <Route path="/authority/validate-protocol">
                                     <ValidateProtocol
-                                        contract = {this.props.contract}
-                                        account = {this.props.account}
+                                        contract={this.props.contract}
+                                        account={this.props.account}
                                     />
-                                </Route> 
+                                </Route>
                                 <Route path="/authority/suspend-resume-trials">
                                     <SuspendResumeTrials
-                                        contract = {this.props.contract}
-                                        account = {this.props.account}
+                                        contract={this.props.contract}
+                                        account={this.props.account}
                                     />
-                                </Route>                                                                             
+                                </Route>
                             </Switch>
                         </BrowserRouter>
-                    </Card.Content>  
-                </Card>        
-            );            
+                    </Card.Content>
+                </Card>
+            );
         }
     }
 }

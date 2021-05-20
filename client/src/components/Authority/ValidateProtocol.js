@@ -29,7 +29,7 @@ class ValidateProtocol extends Component {
             const id = await this.props.contract.methods.protocolsID(i).call({ from: this.props.account });
 
             const protocol = await this.props.contract.methods.protocols(id)
-                .call({ from:  this.props.account });
+                .call({ from: this.props.account });
 
             let struct = {};
             struct.id = id;
@@ -41,8 +41,8 @@ class ValidateProtocol extends Component {
 
             protocolTab.push(struct);
         }
-        
-        this.setState({ protocolsTab: protocolTab});
+
+        this.setState({ protocolsTab: protocolTab });
     }
 
     render() {
@@ -52,52 +52,52 @@ class ValidateProtocol extends Component {
 
         return (
             <div>
-                    <div className="promoter-tab">
-                        {
-                            {nb} !== 0
+                <div className="promoter-tab">
+                    {
+                        { nb } !== 0
                             ?
-                                <div>
-                                    <Header as = 'h2'>Protocols</Header>
-                                    <Table celled>
-                                        <Table.Header>
-                                            <Table.Row>
-                                                <Table.HeaderCell>ID</Table.HeaderCell>
-                                                <Table.HeaderCell>CID</Table.HeaderCell>
-                                                <Table.HeaderCell>Investigator</Table.HeaderCell>
-                                                <Table.HeaderCell>Authorization</Table.HeaderCell>
-                                                <Table.HeaderCell>Status</Table.HeaderCell>
-                                            </Table.Row>
-                                        </Table.Header>
-                                        <Table.Body>   
-                                            {
-                                                Tab.map((res, index, arr) =>
-                                                    <Table.Row key={index}>
-                                                        <Table.Cell>{Tab[index].id}</Table.Cell>
-                                                        <Table.Cell>{Tab[index].cid}</Table.Cell>
-                                                        <Table.Cell>{Tab[index].investigator}</Table.Cell>
-                                                        <Table.Cell textAlign="center">
-                                                            {
-                                                                Tab[index].authorized === false
+                            <div>
+                                <Header as='h2'>Protocols</Header>
+                                <Table celled>
+                                    <Table.Header>
+                                        <Table.Row>
+                                            <Table.HeaderCell>ID</Table.HeaderCell>
+                                            <Table.HeaderCell>CID</Table.HeaderCell>
+                                            <Table.HeaderCell>Investigator</Table.HeaderCell>
+                                            <Table.HeaderCell>Authorization</Table.HeaderCell>
+                                            <Table.HeaderCell>Status</Table.HeaderCell>
+                                        </Table.Row>
+                                    </Table.Header>
+                                    <Table.Body>
+                                        {
+                                            Tab.map((res, index, arr) =>
+                                                <Table.Row key={index}>
+                                                    <Table.Cell>{Tab[index].id}</Table.Cell>
+                                                    <Table.Cell>{Tab[index].cid}</Table.Cell>
+                                                    <Table.Cell>{Tab[index].investigator}</Table.Cell>
+                                                    <Table.Cell textAlign="center">
+                                                        {
+                                                            Tab[index].authorized === false
                                                                 ?
-                                                                    <Button compact color='pink' onClick = {() => this.onButtonClick(Tab[index].id)}>
-                                                                        Authorize
-                                                                    </Button> 
+                                                                <Button compact color='pink' onClick={() => this.onButtonClick(Tab[index].id)}>
+                                                                    Authorize
+                                                                    </Button>
                                                                 :
-                                                                    <Icon color='green' name='checkmark' />
-                                                            }
-                                                        </Table.Cell>
-                                                        <Table.Cell>{Tab[index].status}</Table.Cell>
-                                                    </Table.Row>
-                                                )
-                                            }                                                                           
-                                        </Table.Body>
-                                    </Table>
-                                </div>
+                                                                <Icon color='green' name='checkmark' />
+                                                        }
+                                                    </Table.Cell>
+                                                    <Table.Cell>{Tab[index].status}</Table.Cell>
+                                                </Table.Row>
+                                            )
+                                        }
+                                    </Table.Body>
+                                </Table>
+                            </div>
                             :
-                                console.log("")
+                            console.log("")
 
-                            }
-                    </div>
+                    }
+                </div>
             </div>
         )
     }
