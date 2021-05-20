@@ -30,7 +30,7 @@ class NotUser extends Component {
             <strong>
               Use the account you registered with when you got enrolled.
               <br></br>
-              To interact with the dapp follow the instructions on my Github page here
+              To interact with the Dapp follow the instructions on my Github page here
               [
                 <a href="https://github.com/Edoumou/Tracking-Clinical-Trials-Through-Blockchain/blob/main/README.md" target="_blank" rel="noreferrer">
                 Github
