@@ -1,6 +1,6 @@
 # Tracking-Clinical-Trials-Through-Blockchain
 
-The Dapp has been deployed to heroku to the address: [[medtrials]](https://samuel-medical-trials.herokuapp.com/)
+The Dapp has been deployed to heroku to the address: [[medtrials]](https://samuel-medical-trials.herokuapp.com/), you can use the addresses bellow to navigate through pages with correct address for access.
 
 To interact with the Dapp connect to metamask with the following address => private key.
 
