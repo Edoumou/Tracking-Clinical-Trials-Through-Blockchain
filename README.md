@@ -12,6 +12,8 @@ __mnemonic__: lobster ethics tiger ribbon evidence file crawl bright verify decr
 
 __password__: Medtrials
 
+Next, add accounts 1 to 20. Thhe two first accounts are for authority admin and promoter admin respectively. The third and fourth accounts are for authorities, promoters accounts range from fith to eigth, investigators accounts from nineth to twelth, the rest are those for patients.
+
 # For addresses and their corresponding private keys
 
 - For __AUTHORITY__ page:
