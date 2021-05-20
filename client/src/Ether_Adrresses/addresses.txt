@@ -1,5 +1,58 @@
-**** Mnemonic ****
+************************************* Mnemonic *************************************
 lobster ethics tiger ribbon evidence file crawl bright verify decrease drive senior
+
+metamask password : Medtrials
+************************************************************************************
+
+/============ Authority admin ============
+0xCB7aB77E9577e7E7206511A71834912837d0963f
+
+/============ Promotor admin =============
+0x5A550Cd7866794374B97E91BD1bD8b9a18aB1432
+
+/========== Authorities addresses ========
+0x1328A06e124dc82eE28F0116826400e2E00079dc
+0x82286E5862Af6199CE1d3C401fdFA2066736c46c
+
+/=========== Promotores addresses ========
+0xE5AeBAd0d95221E6E818eFF3303a746aF42B76B6
+0xc72ffc70B576E16DAe2Cd987422770F386259e4c
+0x90025F3477EE90619990a7b8EeABd9cD63Bdab01
+0xa7b9710E6ECB46085f90d5C5b836C2ed691306c4
+
+/======== Investigators addresses ========
+0xdeF69D7B63F2CE54b6b72dA581928B0D7472CeD1
+0x2e7406e3b39Ee44cC777f46d286625a4ebBb38e1
+0x934b025a7C96cf6b7EE7DA36bAfd6D2068Bfa1dF
+0x7d403CA3A1294A3d69f23486CFd795e5D4Fde6cD
+
+/========== Patients addresses ===========
+0xD657eccDc606e0b7204Fcd4b72b70430750ab59A
+0x405D737Eee66968b9B330Beba18fFA1dc99DC030
+0x77f168ea508355aaB35b6EA1F416C557d1139986
+0xFB97C2Ba28C66DFdF2909d7a80FE03388aBE7712
+0xF491A44814A88fEBF2dAD0FB04137aa6D97f8e95
+0x9648967552D7B25b2771C69A4fc4108Dfa30A4E0
+0x27a67Fd3f919129d12F60dE9442448f60165C944
+0x6507056FeF2621EB81F38a238ba62ad399dAC36F
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 **** Addresses ****
 0x2E895decb0f6bDD2EEF861B0cC575165e5d3F2c4

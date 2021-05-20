@@ -27,7 +27,15 @@ class NotUser extends Component {
               <h1>Connect to your metamask account first</h1>
             </div>
             <br></br>
-            <strong>Use the account you registered with when you got enrolled.</strong>
+            <strong>
+              Use the account you registered with when you got enrolled. To interact with the dapp
+              follow the instructions on my Github page here
+              [
+                <a href="https://github.com/Edoumou/Tracking-Clinical-Trials-Through-Blockchain/blob/main/README.md">
+                Github
+                </a>
+              ]
+            </strong>
           </div>
         </div>
       </div>
