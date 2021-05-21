@@ -9,7 +9,7 @@ class SuspendResumeTrials extends Component {
   }
 
   onButtonClick = async (id, status) => {
-    if (status === 'validated') {
+    if (status === 'validated' || status === 'resumed') {
       await this.props.contract.methods.suspendTrials(id)
         .send({ from: this.props.account })
     } else {
@@ -37,17 +37,15 @@ class SuspendResumeTrials extends Component {
         .call({ from: this.props.account });
 
 
-      if (protocol['status'] === 'validated' || protocol['status'] === 'suspended') {
-        let struct = {};
-        struct.id = id;
-        struct.cid = protocol['cid'];
-        struct.status = protocol['status'];
-        struct.authorized = protocol['authorized'];
-        struct.promoter = protocol['promoter'];
-        struct.investigator = protocol['investigator'];
+      let struct = {};
+      struct.id = id;
+      struct.cid = protocol['cid'];
+      struct.status = protocol['status'];
+      struct.authorized = protocol['authorized'];
+      struct.promoter = protocol['promoter'];
+      struct.investigator = protocol['investigator'];
 
-        protocolTab.push(struct);
-      }
+      protocolTab.push(struct);
     }
 
     this.setState({ protocolsTab: protocolTab });
@@ -85,7 +83,7 @@ class SuspendResumeTrials extends Component {
                           <Table.Cell>{Tab[index].investigator}</Table.Cell>
                           <Table.Cell textAlign="center">
                             {
-                              Tab[index].status === 'validated'
+                              Tab[index].status === 'validated' || Tab[index].status === 'resumed'
                                 ?
                                 <Button compact color='pink' onClick={() => this.onButtonClick(Tab[index].id, Tab[index].status)}>
                                   Suspend
