@@ -317,7 +317,6 @@ contract MedTrials is AccessControl {
         );
 
         protocols[_protocolID].alert = true;
-        protocols[_protocolID].authorized = false;
         protocols[_protocolID].status = "suspended";
 
         emit protocolSuspended(_protocolID);
@@ -330,7 +329,6 @@ contract MedTrials is AccessControl {
         );
 
         protocols[_protocolID].alert = false;
-        protocols[_protocolID].authorized = true;
         protocols[_protocolID].status = "resumed";
 
         emit protocolResumed(_protocolID);

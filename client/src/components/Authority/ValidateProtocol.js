@@ -15,10 +15,6 @@ class ValidateProtocol extends Component {
         await this.getProtocols();
     }
 
-    componentDidMount = async () => {
-        await this.getProtocols();
-    }
-
     getProtocols = async () => {
         const nb = await this.props.contract.methods.nbOfProtocolsRegistered()
             .call({ from: this.props.account });
@@ -43,6 +39,10 @@ class ValidateProtocol extends Component {
         }
 
         this.setState({ protocolsTab: protocolTab });
+    }
+
+    componentDidMount = async () => {
+        await this.getProtocols();
     }
 
     render() {
@@ -81,7 +81,7 @@ class ValidateProtocol extends Component {
                                                                 ?
                                                                 <Button compact color='pink' onClick={() => this.onButtonClick(Tab[index].id)}>
                                                                     Authorize
-                                                                    </Button>
+                                                                </Button>
                                                                 :
                                                                 <Icon color='green' name='checkmark' />
                                                         }

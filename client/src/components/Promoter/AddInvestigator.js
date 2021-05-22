@@ -37,14 +37,14 @@ class AddInvestigator extends Component {
             .addInvestigator(this.state.address, cid)
             .send({ from: this.props.account });
 
+        await this.getInvestigators();
+
         //let addr = receipt.events.promoterAdded.returnValues[0];
         this.setState({
             address: "",
             fullName: "",
             company: "",
         });
-
-        await this.getInvestigators();
     };
 
     componentDidMount = async () => {
@@ -141,9 +141,9 @@ class AddInvestigator extends Component {
                                             <Card.Description>
                                                 {Tab[index].description}.<br></br>
                                                 <br></br>
-                        Address:{" "}
+                                                Address:{" "}
                                                 <strong>{Tab[index].address.substr(0, 10)}</strong>...
-                        <hr></hr>
+                                                <hr></hr>
                                             </Card.Description>
                                         </Card.Content>
                                     </Card>

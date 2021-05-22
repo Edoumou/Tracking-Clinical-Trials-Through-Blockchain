@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button, Table, Header } from 'semantic-ui-react';
+import { Button, Table, Header, Icon } from 'semantic-ui-react';
 
 class SuspendResumeTrials extends Component {
   state = {
@@ -83,15 +83,16 @@ class SuspendResumeTrials extends Component {
                           <Table.Cell>{Tab[index].investigator}</Table.Cell>
                           <Table.Cell textAlign="center">
                             {
-                              Tab[index].status === 'validated' || Tab[index].status === 'resumed'
-                                ?
+                              Tab[index].status === 'validated' || Tab[index].status === 'resumed' ?
                                 <Button compact color='pink' onClick={() => this.onButtonClick(Tab[index].id, Tab[index].status)}>
                                   Suspend
                                 </Button>
-                                :
-                                <Button compact color='pink' onClick={() => this.onButtonClick(Tab[index].id, Tab[index].status)}>
-                                  Resume
+                                : Tab[index].status === 'suspended' ?
+                                  <Button compact color='pink' onClick={() => this.onButtonClick(Tab[index].id, Tab[index].status)}>
+                                    Resume
                                 </Button>
+                                  :
+                                  <Icon name="hourglass outline" />
                             }
                           </Table.Cell>
                           <Table.Cell>{Tab[index].status}</Table.Cell>
