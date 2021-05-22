@@ -14,7 +14,7 @@ __password__: Medtrials
 
 Next, add accounts 1 to 20. The two first accounts are for authority admin and promoter admin respectively. The third and fourth accounts are for authorities, promoters accounts range from fith to eigth, investigators accounts from nineth to twelth, the rest are patients accounts.
 
-# For addresses and their corresponding private keys
+# With addresses and their corresponding private keys
 
 - For __AUTHORITY__ page:
 0x1328A06e124dc82eE28F0116826400e2E00079dc => 83af59fb748392a7ed7358a75fa8a353c23f7c9b4d3063615c24f7be2d11b133
