@@ -4,7 +4,7 @@ import headerImage from '../images/header2.jpeg';
 import FetchFromIPFS from "./utils/FetchFromIPFS";
 import '../App.css';
 
-const ENCRYPTION_KEY = 'fpbyr4386v8hpxdruppijkt3v6wayxmi';
+require('dotenv').config();
 
 class Patient extends Component {
     state = {
@@ -41,11 +41,7 @@ class Patient extends Component {
                     investigator: patient.investigator
                 });
 
-                //const encodedData = JSON.parse(await FetchFromIPFS(this.state.cid, ENCRYPTION_KEY));
-
-                //console.log("dATA =", encodedData.data[0]);
-
-                let data = JSON.parse(await FetchFromIPFS(cid, ENCRYPTION_KEY));
+                let data = JSON.parse(await FetchFromIPFS(cid, process.env.REACT_APP_ENCRYPTION_KEY));
 
                 this.setState({
                     ID: data.id,

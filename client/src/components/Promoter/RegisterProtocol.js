@@ -5,8 +5,7 @@ import EncryptData from '../utils/EncryptData';
 import SendToIPFS from '../utils/SendToIPFS';
 import "./styles/style.css";
 
-const iv = 16;
-const ENCRYPTION_KEY = 'fpbyr4386v8hpxdruppijkt3v6wayxmi';
+require('dotenv').config();
 
 class RegisterProtocol extends Component {
     state = {
@@ -42,7 +41,7 @@ class RegisterProtocol extends Component {
         }
 
         const protocolID = `P${this.state.center}${this.state.category}${numerotation}FR`;
-        const encryptedProtocol = EncryptData(this.state.base64, iv, ENCRYPTION_KEY);
+        const encryptedProtocol = EncryptData(this.state.base64, 16, process.env.REACT_APP_ENCRYPTION_KEY);
         const cid = await SendToIPFS(encryptedProtocol);
 
         await this.props.contract.methods.registerProtocol(

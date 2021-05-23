@@ -4,10 +4,8 @@ import EncryptData from '../utils/EncryptData';
 import SendToIPFS from '../utils/SendToIPFS';
 import FetchFromIPFS from '../utils/FetchFromIPFS';
 import Header from './Header';
-//import './styles/style.css';
 
-const iv = 16;
-const ENCRYPTION_KEY = 'fpbyr4386v8hpxdruppijkt3v6wayxmi';
+require('dotenv').config();
 
 class AuthorityAdmin extends Component {
     state = {
@@ -35,9 +33,9 @@ class AuthorityAdmin extends Component {
         }
 
         // store encrypted data to ipfs
-        const encryptedProtocol = EncryptData(JSON.stringify(obj), iv, ENCRYPTION_KEY);
+        const encryptedProtocol = EncryptData(JSON.stringify(obj), 16, process.env.REACT_APP_ENCRYPTION_KEY);
         const cid = await SendToIPFS(encryptedProtocol);
-  
+
         // store the promoter address and the data cid to ethereum
         await this.props.contract.methods.addAuthority(
             this.state.address, cid
@@ -66,144 +64,144 @@ class AuthorityAdmin extends Component {
 
     getAuthorities = async () => {
         const nb = await this.props.contract.methods.nbOfAuthorities()
-            .call({from: this.props.account});
+            .call({ from: this.props.account });
         this.setState({ nbOfAuthorities: nb });
 
         let authorityTab = [];
-        for (let i = 0; i< nb; i++) {
+        for (let i = 0; i < nb; i++) {
             const authority = await this.props.contract.methods.authorities(i)
                 .call({ from: this.props.account });
 
-            let encodedData = await FetchFromIPFS(authority.cid, ENCRYPTION_KEY);
+            let encodedData = await FetchFromIPFS(authority.cid, process.env.REACT_APP_ENCRYPTION_KEY);
             let data = JSON.parse(encodedData);
 
             authorityTab.push(data);
-            
+
         }
 
         this.setState({ authorities: authorityTab });
     }
 
-  render() {
-    const { address, fullName, company, authorityAddress, message } = this.state;
-    const nb = this.state.nbOfAuthorities;
-    let Tab = [];
-    Tab = this.state.authorities;
-    
+    render() {
+        const { address, fullName, company, authorityAddress, message } = this.state;
+        const nb = this.state.nbOfAuthorities;
+        let Tab = [];
+        Tab = this.state.authorities;
 
-    // fetch promoters address and cids from ethereum
-    console.log("NB =", this.state.nbOfAuthorities);
-    console.log("Promoters =", this.state.authorities);
 
-    return (
-        <div>
-            <Header
-                contract = {this.props.contract}
-                role = {this.props.role}
-                account = {this.props.account}
-            />
-            
+        // fetch promoters address and cids from ethereum
+        console.log("NB =", this.state.nbOfAuthorities);
+        console.log("Promoters =", this.state.authorities);
+
+        return (
             <div>
-                <div className="admin-h1">
-                    <h1>Add an authority</h1>
-                </div>
-                
-                <div className="admin-form">
-                    <Form size="large" onSubmit={this.onFormSubmit}>
-                        <Form.Group>
-                            <Form.Field
-                                label='Name'
-                                name='fullName'
-                                value={fullName}
-                                placeholder='Full Name'
-                                control='input'
-                                width='7'
-                                required
-                                onChange={e => this.setState({ fullName: e.target.value })}
-                            />
-                            <Form.Field
-                                label='Company'
-                                name='company'
-                                value={company}
-                                placeholder='Company'
-                                control='input'
-                                width='7'
-                                required
-                                onChange={e => this.setState({ company: e.target.value })}
-                            />
-                            <Form.Field
-                                label='Authority address'
-                                name='address'
-                                value={address}
-                                placeholder="Authority Address"
-                                control='input'
-                                width="10"
-                                required
-                                onChange={e => this.setState({ address: e.target.value })}
-                            />
-                            <Button primary>Submit</Button>          
-                        </Form.Group>
-                    </Form>                    
-                </div>
+                <Header
+                    contract={this.props.contract}
+                    role={this.props.role}
+                    account={this.props.account}
+                />
 
-                <div className="admin-divider">
-                    <Divider />
-                </div>
+                <div>
+                    <div className="admin-h1">
+                        <h1>Add an authority</h1>
+                    </div>
 
-                <div className="admin-grid">
-                    {
-                        {nb} !== 0
-                        ?
-                            <Grid columns={3} divided>
-                                {
-                                    Tab.map((res, index, arr) =>
-                                        <div className="admin-card" key={index}>
-                                            <Card>
-                                                <Card.Content textAlign="left">
-                                                    <Image
-                                                        floated='right'
-                                                        size='mini'
-                                                        src='https://react.semantic-ui.com/images/avatar/large/steve.jpg'
-                                                    />
-                                                    <Card.Header>{Tab[index].fullName}</Card.Header>
-                                                    <Card.Meta>Authority at {Tab[index].company}</Card.Meta>
-                                                    <Card.Description>
-                                                        {Tab[index].description}.
+                    <div className="admin-form">
+                        <Form size="large" onSubmit={this.onFormSubmit}>
+                            <Form.Group>
+                                <Form.Field
+                                    label='Name'
+                                    name='fullName'
+                                    value={fullName}
+                                    placeholder='Full Name'
+                                    control='input'
+                                    width='7'
+                                    required
+                                    onChange={e => this.setState({ fullName: e.target.value })}
+                                />
+                                <Form.Field
+                                    label='Company'
+                                    name='company'
+                                    value={company}
+                                    placeholder='Company'
+                                    control='input'
+                                    width='7'
+                                    required
+                                    onChange={e => this.setState({ company: e.target.value })}
+                                />
+                                <Form.Field
+                                    label='Authority address'
+                                    name='address'
+                                    value={address}
+                                    placeholder="Authority Address"
+                                    control='input'
+                                    width="10"
+                                    required
+                                    onChange={e => this.setState({ address: e.target.value })}
+                                />
+                                <Button primary>Submit</Button>
+                            </Form.Group>
+                        </Form>
+                    </div>
+
+                    <div className="admin-divider">
+                        <Divider />
+                    </div>
+
+                    <div className="admin-grid">
+                        {
+                            { nb } !== 0
+                                ?
+                                <Grid columns={3} divided>
+                                    {
+                                        Tab.map((res, index, arr) =>
+                                            <div className="admin-card" key={index}>
+                                                <Card>
+                                                    <Card.Content textAlign="left">
+                                                        <Image
+                                                            floated='right'
+                                                            size='mini'
+                                                            src='https://react.semantic-ui.com/images/avatar/large/steve.jpg'
+                                                        />
+                                                        <Card.Header>{Tab[index].fullName}</Card.Header>
+                                                        <Card.Meta>Authority at {Tab[index].company}</Card.Meta>
+                                                        <Card.Description>
+                                                            {Tab[index].description}.
                                                         <br></br>
-                                                        <br></br>
+                                                            <br></br>
                                                         Address: <strong>{Tab[index].address.substr(0, 10)}</strong>...
                                                         <hr></hr>
-                                                    </Card.Description>                                    
-                                                </Card.Content>
-                                            </Card>                                            
-                                        </div> 
-                                    )
-                                }
-                            </Grid>
-                        :
-                            console.log("")
-                    }
-                </div>
-                
+                                                        </Card.Description>
+                                                    </Card.Content>
+                                                </Card>
+                                            </div>
+                                        )
+                                    }
+                                </Grid>
+                                :
+                                console.log("")
+                        }
+                    </div>
 
-                <div className="promoter-admin-msg">
-                    {
-                        {message} !== ''
-                        ?
-                            console.log("")
-                        :
-                            <Message positive onDismiss={this.onMessageClose}>
-                                <Message.Header>Authority added</Message.Header>
-                                <p>
-                                    Authority with address {authorityAddress} as been added.
+
+                    <div className="promoter-admin-msg">
+                        {
+                            { message } !== ''
+                                ?
+                                console.log("")
+                                :
+                                <Message positive onDismiss={this.onMessageClose}>
+                                    <Message.Header>Authority added</Message.Header>
+                                    <p>
+                                        Authority with address {authorityAddress} as been added.
                                 </p>
-                            </Message>                        
-                    }
+                                </Message>
+                        }
+                    </div>
                 </div>
             </div>
-        </div>
-    );
-  }
+        );
+    }
 }
 
 export default AuthorityAdmin

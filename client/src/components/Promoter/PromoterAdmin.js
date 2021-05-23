@@ -14,9 +14,6 @@ import FetchFromIPFS from "../utils/FetchFromIPFS";
 import Header from "./Header";
 import "./styles/style.css";
 
-const iv = 16;
-const ENCRYPTION_KEY = "fpbyr4386v8hpxdruppijkt3v6wayxmi";
-
 class PromoterAdmin extends Component {
   state = {
     ci: "",
@@ -45,8 +42,8 @@ class PromoterAdmin extends Component {
     // store encrypted data to ipfs
     const encryptedProtocol = EncryptData(
       JSON.stringify(obj),
-      iv,
-      ENCRYPTION_KEY
+      16,
+      process.env.REACT_APP_ENCRYPTION_KEY
     );
     const cid = await SendToIPFS(encryptedProtocol);
 
@@ -87,7 +84,7 @@ class PromoterAdmin extends Component {
         .promoters(i)
         .call({ from: this.props.account });
 
-      let encodedData = await FetchFromIPFS(promoter.cid, ENCRYPTION_KEY);
+      let encodedData = await FetchFromIPFS(promoter.cid, process.env.REACT_APP_ENCRYPTION_KEY);
       let data = JSON.parse(encodedData);
 
       promoterTab.push(data);

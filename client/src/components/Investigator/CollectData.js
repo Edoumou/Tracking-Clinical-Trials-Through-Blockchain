@@ -8,8 +8,7 @@ import FetchFromIPFS from "../utils/FetchFromIPFS";
 import ChartBar from '../charts/ChartBar';
 import "./styles/style.css";
 
-const iv = 16;
-const ENCRYPTION_KEY = 'fpbyr4386v8hpxdruppijkt3v6wayxmi';
+require('dotenv').config();
 
 class CollectData extends Component {
   state = {
@@ -184,7 +183,7 @@ class CollectData extends Component {
       data: this.state.base64
     }
 
-    const encryptedData = EncryptData(JSON.stringify(obj), iv, ENCRYPTION_KEY);
+    const encryptedData = EncryptData(JSON.stringify(obj), 16, process.env.REACT_APP_ENCRYPTION_KEY);
     const cid = await SendToIPFS(encryptedData);
     console.log("ID HERE =", this.state.ID);
     const receipt = await this.props.contract.methods.storeDataCID(this.state.ID, cid, this.state.SSE)
@@ -262,7 +261,7 @@ class CollectData extends Component {
   }
 
   onCIDButtonClick = async () => {
-    let data = await FetchFromIPFS(this.state.cid, ENCRYPTION_KEY);
+    let data = await FetchFromIPFS(this.state.cid, process.env.REACT_APP_ENCRYPTION_KEY);
     this.setState({
       msg2: 'ok',
       dataFromIPFS: JSON.parse(data).data

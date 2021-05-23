@@ -4,8 +4,7 @@ import EncryptData from "../utils/EncryptData";
 import SendToIPFS from "../utils/SendToIPFS";
 import FetchFromIPFS from "../utils/FetchFromIPFS";
 
-const iv = 16;
-const ENCRYPTION_KEY = "fpbyr4386v8hpxdruppijkt3v6wayxmi";
+require('dotenv').config();
 
 class AddInvestigator extends Component {
     state = {
@@ -29,7 +28,7 @@ class AddInvestigator extends Component {
         };
 
         // store encrypted data to ipfs
-        const encryptedData = EncryptData(JSON.stringify(obj), iv, ENCRYPTION_KEY);
+        const encryptedData = EncryptData(JSON.stringify(obj), 16, process.env.REACT_APP_ENCRYPTION_KEY);
         const cid = await SendToIPFS(encryptedData);
 
         // store the investigator address and the data cid to ethereum
@@ -63,7 +62,7 @@ class AddInvestigator extends Component {
                 .investigators(i)
                 .call({ from: this.props.account });
 
-            let encodedData = await FetchFromIPFS(investigator.cid, ENCRYPTION_KEY);
+            let encodedData = await FetchFromIPFS(investigator.cid, process.env.REACT_APP_ENCRYPTION_KEY);
             let data = JSON.parse(encodedData);
 
             if (investigator["promoter"] === this.props.account) {

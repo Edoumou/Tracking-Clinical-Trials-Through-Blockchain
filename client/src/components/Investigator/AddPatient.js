@@ -5,8 +5,7 @@ import EncryptData from "../utils/EncryptData";
 import SendToIPFS from "../utils/SendToIPFS";
 import "./styles/style.css";
 
-const iv = 16;
-const ENCRYPTION_KEY = "fpbyr4386v8hpxdruppijkt3v6wayxmi";
+require('dotenv').config();
 
 class AddPatient extends Component {
   state = {
@@ -72,7 +71,7 @@ class AddPatient extends Component {
     };
 
     // encrypt the patient data and store the encrypted data to ipfs
-    const encryptedData = EncryptData(JSON.stringify(obj), iv, ENCRYPTION_KEY);
+    const encryptedData = EncryptData(JSON.stringify(obj), 16, process.env.REACT_APP_ENCRYPTION_KEY);
     const cid = await SendToIPFS(encryptedData);
 
     console.log("CID =", cid);
