@@ -4,6 +4,9 @@ lobster ethics tiger ribbon evidence file crawl bright verify decrease drive sen
 metamask password : Medtrials
 ************************************************************************************
 
+/============ DEFAULT_ADMIN ==============
+0x1328A06e124dc82eE28F0116826400e2E00079dc
+
 /============ Authority admin ============
 0xCB7aB77E9577e7E7206511A71834912837d0963f
 
@@ -14,7 +17,7 @@ metamask password : Medtrials
 0x1328A06e124dc82eE28F0116826400e2E00079dc
 0x82286E5862Af6199CE1d3C401fdFA2066736c46c
 
-/=========== Promotores addresses ========
+/=========== Promoters addresses ========
 0xE5AeBAd0d95221E6E818eFF3303a746aF42B76B6
 0xc72ffc70B576E16DAe2Cd987422770F386259e4c
 0x90025F3477EE90619990a7b8EeABd9cD63Bdab01
