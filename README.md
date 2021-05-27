@@ -16,4 +16,4 @@ __password__: Medtrials
 
 Next, add accounts 1 to 20. The two first accounts are for authority admin and promoter admin respectively. The third and fourth accounts are for authorities, promoters accounts range from fith to eigth, investigators accounts from nineth to twelth, the rest are patients accounts.
 
-In his beard lived three <span style="color:red">cardinals</span>.
+In his beard lived three <span style="color:red">cardinals</span>
