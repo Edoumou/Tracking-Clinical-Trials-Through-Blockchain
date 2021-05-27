@@ -6,7 +6,7 @@ To interact with the Dapp connect to metamask with the mnemonic and the password
 
 __NB__: You can connect to the __rinkeby__ network (this is a tesnet), these addresses have been provided with some eth necessary for transactions (only for Rinkeby).
 
-# With mnemonic and password
+# Connecting with mnemonic and password
 
 __mnemonic__: lobster ethics tiger ribbon evidence file crawl bright verify decrease drive senior
 
