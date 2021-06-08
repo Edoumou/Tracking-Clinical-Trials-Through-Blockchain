@@ -2,10 +2,10 @@ const path = require("path");
 const HDWalletProvider = require('./client/node_modules/@truffle/hdwallet-provider');
 require('./client/node_modules/dotenv').config();
 
-const MNEMONIC = process.env.MNEMONIC;
-const RINKEBY_KEY = process.env.RINKEBY_KEY;
+const MNEMONIC = process.env.REACT_APP_MNEMONIC;
+const RINKEBY_KEY = process.env.REACT_APP_RINKEBY_KEY;
 
-console.log("MNEMONIC =", process.env.MNEMONIC, process.env.RINKEBY_KEY);
+console.log("MNEMONIC =", MNEMONIC, RINKEBY_KEY);
 
 module.exports = {
   // See <http://truffleframework.com/docs/advanced/configuration>

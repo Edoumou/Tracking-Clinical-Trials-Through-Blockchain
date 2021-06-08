@@ -88,11 +88,6 @@ class AuthorityAdmin extends Component {
         let Tab = [];
         Tab = this.state.authorities;
 
-
-        // fetch promoters address and cids from ethereum
-        console.log("NB =", this.state.nbOfAuthorities);
-        console.log("Promoters =", this.state.authorities);
-
         return (
             <div>
                 <Header
