@@ -32,6 +32,8 @@ class AuthorityAdmin extends Component {
             description: `${this.state.fullName} is a full authority at ${this.state.company}. To know more...`
         }
 
+        console.log("KEY =", process.env.REACT_APP_ENCRYPTION_KEY);
+
         // store encrypted data to ipfs
         const encryptedProtocol = EncryptData(JSON.stringify(obj), 16, process.env.REACT_APP_ENCRYPTION_KEY);
         const cid = await SendToIPFS(encryptedProtocol);
