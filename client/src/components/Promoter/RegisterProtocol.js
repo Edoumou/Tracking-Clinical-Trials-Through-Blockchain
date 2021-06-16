@@ -53,7 +53,7 @@ class RegisterProtocol extends Component {
         this.setState({
             center: '',
             category: '',
-            investigatorAddress: '',
+            investigatorAddress: ''
             base64: '',
             filename: ''
         });
