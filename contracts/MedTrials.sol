@@ -57,7 +57,7 @@ contract MedTrials is AccessControl {
     bytes32 public constant PROMOTER = keccak256("PROMOTER");
     bytes32 public constant PROMOTER_ADMIN = keccak256("PROMOTERADMIN");
     bytes32 public constant INVESTIGATOR = keccak256("INVESTIGATOR");
-    bytes32 public constant PATIENT = keccak256("PATIENT");
+    bytes32 public constant PATIENT = keccak256("PATIENT")
 
     uint256 public nbOfProtocolsRegistered;
     uint256 public nbOfPatients;
