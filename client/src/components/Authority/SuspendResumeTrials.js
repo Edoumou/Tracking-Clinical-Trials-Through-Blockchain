@@ -17,7 +17,7 @@ class SuspendResumeTrials extends Component {
         .send({ from: this.props.account })
     }
 
-    await this.getProtocols();
+    await this.getProtocols()
   }
 
   componentDidMount = async () => {
