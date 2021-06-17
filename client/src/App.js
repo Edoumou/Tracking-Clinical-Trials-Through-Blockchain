@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import "semantic-ui-css/semantic.min.css";
 import MedTrials from "./contracts/MedTrials.json";
-import getWeb3 from "./getWeb3";
+import getWeb3 from "./getWeb3"
 import "./App.css";
 import NotUser from "./components/NotUser";
 import Authority from "./components/Authority/Authority";
